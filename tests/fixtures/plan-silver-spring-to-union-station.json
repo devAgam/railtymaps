@@ -1,0 +1,584 @@
+{
+ "itineraries": [
+  {
+   "duration": 1140,
+   "startTime": "2026-11-17T13:24:00Z",
+   "endTime": "2026-11-17T13:43:00Z",
+   "transfers": 0,
+   "legs": [
+    {
+     "mode": "WALK",
+     "startTime": "2026-11-17T13:24:00Z",
+     "endTime": "2026-11-17T13:25:00Z",
+     "duration": 60,
+     "distance": 36.0,
+     "legGeometry": {
+      "points": "cp|vfVxm~f|l@??e~@jkA??zzArbB",
+      "precision": 7,
+      "length": 5
+     },
+     "from": {
+      "name": "START",
+      "lat": 38.9937,
+      "lon": -77.031
+     },
+     "to": {
+      "name": "Silver Spring",
+      "stopId": "us-dc-WMATA-rail_PF_B08_C",
+      "lat": 38.99369,
+      "lon": -77.03118
+     }
+    },
+    {
+     "mode": "SUBWAY",
+     "startTime": "2026-11-17T13:25:00Z",
+     "endTime": "2026-11-17T13:39:00Z",
+     "duration": 840,
+     "routeShortName": "R",
+     "routeLongName": "Red",
+     "displayName": "R",
+     "agencyName": "WMATA",
+     "headsign": "Shady Grove",
+     "routeColor": "c80f2d",
+     "routeTextColor": "ffffff",
+     "legGeometry": {
+      "points": "gozvfVnfbg|l@~oHgcJ~eRwtT~cXodYziV_tUn{K_vJjuJ_dIf|TwwPrwVwwPz}V_lObiWofNji_@g}Qfa}@oha@b}iAogi@np|BgoeAztI_gE~jHgmEfxGkpEziG{|E~xFgfFzzFg_GvsHgcJfst@wa~@vaLwiMzbHgxGrfHo`G~jH_oFnwHo}E~jH_}DnwHgtDnwHg{CjhI_uCbhx@gzUbfe@ggMzqWowHjo\\g|JbydB_ei@z~l@s_Sf~yAgud@jgy@cbXf|OcjEnyLkeCwBg^vBf^fzAoZf`IwmA~mI_jAftXgbCfkP_jAfbp@_uCnsJ?v~Jvj@zhJfpAzmJ~{Bz~b@vsMzcYrzHvci@brP~p@wjE_q@vjE~yM~fE~tHfjDvyTvlNnvFrkCvcAja@rzHfiBjtHvrAnwH~z@~gG~f@nwHngArbEn}@vlDfpArdDnvAblD~{Bjhg@~m]~fOvoJ~dFvnCfaUf|Jf}QfcJo`BfxGn`BgxGzTvQb|FneBrak@~|NftDbt@f|Ob_CryFnvA~fEvfBb`EvzBjrD~eCfeX~hSn_EnhC~zEvuBr_InhCboY~`Hv}a@roKkCrNjCsNwhAka@",
+      "precision": 7,
+      "length": 98
+     },
+     "from": {
+      "name": "Silver Spring",
+      "stopId": "us-dc-WMATA-rail_PF_B08_C",
+      "lat": 38.99369,
+      "lon": -77.03118
+     },
+     "to": {
+      "name": "Union Station",
+      "stopId": "us-dc-WMATA-rail_PF_B03_C",
+      "lat": 38.897487999999996,
+      "lon": -77.00746000000001
+     },
+     "intermediateStops": [
+      {
+       "name": "Takoma",
+       "stopId": "us-dc-WMATA-rail_PF_B07_C",
+       "lat": 38.97602,
+       "lon": -77.01813
+      },
+      {
+       "name": "Fort Totten",
+       "stopId": "us-dc-WMATA-rail_PF_B06_C",
+       "lat": 38.951789999999995,
+       "lon": -77.00215
+      },
+      {
+       "name": "Brookland-CUA",
+       "stopId": "us-dc-WMATA-rail_PF_B05_C",
+       "lat": 38.933117,
+       "lon": -76.99453000000001
+      },
+      {
+       "name": "Rhode Island Av",
+       "stopId": "us-dc-WMATA-rail_PF_B04_C",
+       "lat": 38.920906,
+       "lon": -76.99594
+      },
+      {
+       "name": "NoMa-Gallaudet U",
+       "stopId": "us-dc-WMATA-rail_PF_B35_C",
+       "lat": 38.90661,
+       "lon": -77.00331
+      }
+     ]
+    },
+    {
+     "mode": "WALK",
+     "startTime": "2026-11-17T13:39:00Z",
+     "endTime": "2026-11-17T13:43:00Z",
+     "duration": 240,
+     "distance": 267.0,
+     "legGeometry": {
+      "points": "eyc|dVvgsx{l@??v@vFkKt@wj@{Dqa@kG??nv@zSt~@`WbJnBjJtB??zK}w@??xBjBxFrG~OhPrRhLlOpCfOoA~ScHpQeNnI{OhH}YrDsUz@uGvB}Q??oPwE??uZqI??eAY??eSqF??kPoE??ye@yM??asCis@??xI_p@hMu`Axs@uqFvq@ihF??e~Bul@mZ{H??yo@qP}Aa@??vCcT??lAoDfD{B??",
+      "precision": 7,
+      "length": 58
+     },
+     "from": {
+      "name": "Union Station",
+      "stopId": "us-dc-WMATA-rail_PF_B03_C",
+      "lat": 38.897487999999996,
+      "lon": -77.00746000000001
+     },
+     "to": {
+      "name": "END",
+      "lat": 38.8977,
+      "lon": -77.006
+     }
+    }
+   ]
+  },
+  {
+   "duration": 1140,
+   "startTime": "2026-11-17T13:28:00Z",
+   "endTime": "2026-11-17T13:47:00Z",
+   "transfers": 0,
+   "legs": [
+    {
+     "mode": "WALK",
+     "startTime": "2026-11-17T13:28:00Z",
+     "endTime": "2026-11-17T13:29:00Z",
+     "duration": 60,
+     "distance": 36.0,
+     "legGeometry": {
+      "points": "cp|vfVxm~f|l@??e~@jkA??zzArbB",
+      "precision": 7,
+      "length": 5
+     },
+     "from": {
+      "name": "START",
+      "lat": 38.9937,
+      "lon": -77.031
+     },
+     "to": {
+      "name": "Silver Spring",
+      "stopId": "us-dc-WMATA-rail_PF_B08_C",
+      "lat": 38.99369,
+      "lon": -77.03118
+     }
+    },
+    {
+     "mode": "SUBWAY",
+     "startTime": "2026-11-17T13:29:00Z",
+     "endTime": "2026-11-17T13:43:00Z",
+     "duration": 840,
+     "routeShortName": "R",
+     "routeLongName": "Red",
+     "displayName": "R",
+     "agencyName": "WMATA",
+     "headsign": "Shady Grove",
+     "routeColor": "c80f2d",
+     "routeTextColor": "ffffff",
+     "legGeometry": {
+      "points": "gozvfVnfbg|l@~oHgcJ~eRwtT~cXodYziV_tUn{K_vJjuJ_dIf|TwwPrwVwwPz}V_lObiWofNji_@g}Qfa}@oha@b}iAogi@np|BgoeAztI_gE~jHgmEfxGkpEziG{|E~xFgfFzzFg_GvsHgcJfst@wa~@vaLwiMzbHgxGrfHo`G~jH_oFnwHo}E~jH_}DnwHgtDnwHg{CjhI_uCbhx@gzUbfe@ggMzqWowHjo\\g|JbydB_ei@z~l@s_Sf~yAgud@jgy@cbXf|OcjEnyLkeCwBg^vBf^fzAoZf`IwmA~mI_jAftXgbCfkP_jAfbp@_uCnsJ?v~Jvj@zhJfpAzmJ~{Bz~b@vsMzcYrzHvci@brP~p@wjE_q@vjE~yM~fE~tHfjDvyTvlNnvFrkCvcAja@rzHfiBjtHvrAnwH~z@~gG~f@nwHngArbEn}@vlDfpArdDnvAblD~{Bjhg@~m]~fOvoJ~dFvnCfaUf|Jf}QfcJo`BfxGn`BgxGzTvQb|FneBrak@~|NftDbt@f|Ob_CryFnvA~fEvfBb`EvzBjrD~eCfeX~hSn_EnhC~zEvuBr_InhCboY~`Hv}a@roKkCrNjCsNwhAka@",
+      "precision": 7,
+      "length": 98
+     },
+     "from": {
+      "name": "Silver Spring",
+      "stopId": "us-dc-WMATA-rail_PF_B08_C",
+      "lat": 38.99369,
+      "lon": -77.03118
+     },
+     "to": {
+      "name": "Union Station",
+      "stopId": "us-dc-WMATA-rail_PF_B03_C",
+      "lat": 38.897487999999996,
+      "lon": -77.00746000000001
+     },
+     "intermediateStops": [
+      {
+       "name": "Takoma",
+       "stopId": "us-dc-WMATA-rail_PF_B07_C",
+       "lat": 38.97602,
+       "lon": -77.01813
+      },
+      {
+       "name": "Fort Totten",
+       "stopId": "us-dc-WMATA-rail_PF_B06_C",
+       "lat": 38.951789999999995,
+       "lon": -77.00215
+      },
+      {
+       "name": "Brookland-CUA",
+       "stopId": "us-dc-WMATA-rail_PF_B05_C",
+       "lat": 38.933117,
+       "lon": -76.99453000000001
+      },
+      {
+       "name": "Rhode Island Av",
+       "stopId": "us-dc-WMATA-rail_PF_B04_C",
+       "lat": 38.920906,
+       "lon": -76.99594
+      },
+      {
+       "name": "NoMa-Gallaudet U",
+       "stopId": "us-dc-WMATA-rail_PF_B35_C",
+       "lat": 38.90661,
+       "lon": -77.00331
+      }
+     ]
+    },
+    {
+     "mode": "WALK",
+     "startTime": "2026-11-17T13:43:00Z",
+     "endTime": "2026-11-17T13:47:00Z",
+     "duration": 240,
+     "distance": 267.0,
+     "legGeometry": {
+      "points": "eyc|dVvgsx{l@??v@vFkKt@wj@{Dqa@kG??nv@zSt~@`WbJnBjJtB??zK}w@??xBjBxFrG~OhPrRhLlOpCfOoA~ScHpQeNnI{OhH}YrDsUz@uGvB}Q??oPwE??uZqI??eAY??eSqF??kPoE??ye@yM??asCis@??xI_p@hMu`Axs@uqFvq@ihF??e~Bul@mZ{H??yo@qP}Aa@??vCcT??lAoDfD{B??",
+      "precision": 7,
+      "length": 58
+     },
+     "from": {
+      "name": "Union Station",
+      "stopId": "us-dc-WMATA-rail_PF_B03_C",
+      "lat": 38.897487999999996,
+      "lon": -77.00746000000001
+     },
+     "to": {
+      "name": "END",
+      "lat": 38.8977,
+      "lon": -77.006
+     }
+    }
+   ]
+  },
+  {
+   "duration": 1140,
+   "startTime": "2026-11-17T13:32:00Z",
+   "endTime": "2026-11-17T13:51:00Z",
+   "transfers": 0,
+   "legs": [
+    {
+     "mode": "WALK",
+     "startTime": "2026-11-17T13:32:00Z",
+     "endTime": "2026-11-17T13:33:00Z",
+     "duration": 60,
+     "distance": 36.0,
+     "legGeometry": {
+      "points": "cp|vfVxm~f|l@??e~@jkA??zzArbB",
+      "precision": 7,
+      "length": 5
+     },
+     "from": {
+      "name": "START",
+      "lat": 38.9937,
+      "lon": -77.031
+     },
+     "to": {
+      "name": "Silver Spring",
+      "stopId": "us-dc-WMATA-rail_PF_B08_C",
+      "lat": 38.99369,
+      "lon": -77.03118
+     }
+    },
+    {
+     "mode": "SUBWAY",
+     "startTime": "2026-11-17T13:33:00Z",
+     "endTime": "2026-11-17T13:47:00Z",
+     "duration": 840,
+     "routeShortName": "R",
+     "routeLongName": "Red",
+     "displayName": "R",
+     "agencyName": "WMATA",
+     "headsign": "Shady Grove",
+     "routeColor": "c80f2d",
+     "routeTextColor": "ffffff",
+     "legGeometry": {
+      "points": "gozvfVnfbg|l@~oHgcJ~eRwtT~cXodYziV_tUn{K_vJjuJ_dIf|TwwPrwVwwPz}V_lObiWofNji_@g}Qfa}@oha@b}iAogi@np|BgoeAztI_gE~jHgmEfxGkpEziG{|E~xFgfFzzFg_GvsHgcJfst@wa~@vaLwiMzbHgxGrfHo`G~jH_oFnwHo}E~jH_}DnwHgtDnwHg{CjhI_uCbhx@gzUbfe@ggMzqWowHjo\\g|JbydB_ei@z~l@s_Sf~yAgud@jgy@cbXf|OcjEnyLkeCwBg^vBf^fzAoZf`IwmA~mI_jAftXgbCfkP_jAfbp@_uCnsJ?v~Jvj@zhJfpAzmJ~{Bz~b@vsMzcYrzHvci@brP~p@wjE_q@vjE~yM~fE~tHfjDvyTvlNnvFrkCvcAja@rzHfiBjtHvrAnwH~z@~gG~f@nwHngArbEn}@vlDfpArdDnvAblD~{Bjhg@~m]~fOvoJ~dFvnCfaUf|Jf}QfcJo`BfxGn`BgxGzTvQb|FneBrak@~|NftDbt@f|Ob_CryFnvA~fEvfBb`EvzBjrD~eCfeX~hSn_EnhC~zEvuBr_InhCboY~`Hv}a@roKkCrNjCsNwhAka@",
+      "precision": 7,
+      "length": 98
+     },
+     "from": {
+      "name": "Silver Spring",
+      "stopId": "us-dc-WMATA-rail_PF_B08_C",
+      "lat": 38.99369,
+      "lon": -77.03118
+     },
+     "to": {
+      "name": "Union Station",
+      "stopId": "us-dc-WMATA-rail_PF_B03_C",
+      "lat": 38.897487999999996,
+      "lon": -77.00746000000001
+     },
+     "intermediateStops": [
+      {
+       "name": "Takoma",
+       "stopId": "us-dc-WMATA-rail_PF_B07_C",
+       "lat": 38.97602,
+       "lon": -77.01813
+      },
+      {
+       "name": "Fort Totten",
+       "stopId": "us-dc-WMATA-rail_PF_B06_C",
+       "lat": 38.951789999999995,
+       "lon": -77.00215
+      },
+      {
+       "name": "Brookland-CUA",
+       "stopId": "us-dc-WMATA-rail_PF_B05_C",
+       "lat": 38.933117,
+       "lon": -76.99453000000001
+      },
+      {
+       "name": "Rhode Island Av",
+       "stopId": "us-dc-WMATA-rail_PF_B04_C",
+       "lat": 38.920906,
+       "lon": -76.99594
+      },
+      {
+       "name": "NoMa-Gallaudet U",
+       "stopId": "us-dc-WMATA-rail_PF_B35_C",
+       "lat": 38.90661,
+       "lon": -77.00331
+      }
+     ]
+    },
+    {
+     "mode": "WALK",
+     "startTime": "2026-11-17T13:47:00Z",
+     "endTime": "2026-11-17T13:51:00Z",
+     "duration": 240,
+     "distance": 267.0,
+     "legGeometry": {
+      "points": "eyc|dVvgsx{l@??v@vFkKt@wj@{Dqa@kG??nv@zSt~@`WbJnBjJtB??zK}w@??xBjBxFrG~OhPrRhLlOpCfOoA~ScHpQeNnI{OhH}YrDsUz@uGvB}Q??oPwE??uZqI??eAY??eSqF??kPoE??ye@yM??asCis@??xI_p@hMu`Axs@uqFvq@ihF??e~Bul@mZ{H??yo@qP}Aa@??vCcT??lAoDfD{B??",
+      "precision": 7,
+      "length": 58
+     },
+     "from": {
+      "name": "Union Station",
+      "stopId": "us-dc-WMATA-rail_PF_B03_C",
+      "lat": 38.897487999999996,
+      "lon": -77.00746000000001
+     },
+     "to": {
+      "name": "END",
+      "lat": 38.8977,
+      "lon": -77.006
+     }
+    }
+   ]
+  },
+  {
+   "duration": 1140,
+   "startTime": "2026-11-17T13:36:00Z",
+   "endTime": "2026-11-17T13:55:00Z",
+   "transfers": 0,
+   "legs": [
+    {
+     "mode": "WALK",
+     "startTime": "2026-11-17T13:36:00Z",
+     "endTime": "2026-11-17T13:37:00Z",
+     "duration": 60,
+     "distance": 36.0,
+     "legGeometry": {
+      "points": "cp|vfVxm~f|l@??e~@jkA??zzArbB",
+      "precision": 7,
+      "length": 5
+     },
+     "from": {
+      "name": "START",
+      "lat": 38.9937,
+      "lon": -77.031
+     },
+     "to": {
+      "name": "Silver Spring",
+      "stopId": "us-dc-WMATA-rail_PF_B08_C",
+      "lat": 38.99369,
+      "lon": -77.03118
+     }
+    },
+    {
+     "mode": "SUBWAY",
+     "startTime": "2026-11-17T13:37:00Z",
+     "endTime": "2026-11-17T13:51:00Z",
+     "duration": 840,
+     "routeShortName": "R",
+     "routeLongName": "Red",
+     "displayName": "R",
+     "agencyName": "WMATA",
+     "headsign": "Shady Grove",
+     "routeColor": "c80f2d",
+     "routeTextColor": "ffffff",
+     "legGeometry": {
+      "points": "gozvfVnfbg|l@~oHgcJ~eRwtT~cXodYziV_tUn{K_vJjuJ_dIf|TwwPrwVwwPz}V_lObiWofNji_@g}Qfa}@oha@b}iAogi@np|BgoeAztI_gE~jHgmEfxGkpEziG{|E~xFgfFzzFg_GvsHgcJfst@wa~@vaLwiMzbHgxGrfHo`G~jH_oFnwHo}E~jH_}DnwHgtDnwHg{CjhI_uCbhx@gzUbfe@ggMzqWowHjo\\g|JbydB_ei@z~l@s_Sf~yAgud@jgy@cbXf|OcjEnyLkeCwBg^vBf^fzAoZf`IwmA~mI_jAftXgbCfkP_jAfbp@_uCnsJ?v~Jvj@zhJfpAzmJ~{Bz~b@vsMzcYrzHvci@brP~p@wjE_q@vjE~yM~fE~tHfjDvyTvlNnvFrkCvcAja@rzHfiBjtHvrAnwH~z@~gG~f@nwHngArbEn}@vlDfpArdDnvAblD~{Bjhg@~m]~fOvoJ~dFvnCfaUf|Jf}QfcJo`BfxGn`BgxGzTvQb|FneBrak@~|NftDbt@f|Ob_CryFnvA~fEvfBb`EvzBjrD~eCfeX~hSn_EnhC~zEvuBr_InhCboY~`Hv}a@roKkCrNjCsNwhAka@",
+      "precision": 7,
+      "length": 98
+     },
+     "from": {
+      "name": "Silver Spring",
+      "stopId": "us-dc-WMATA-rail_PF_B08_C",
+      "lat": 38.99369,
+      "lon": -77.03118
+     },
+     "to": {
+      "name": "Union Station",
+      "stopId": "us-dc-WMATA-rail_PF_B03_C",
+      "lat": 38.897487999999996,
+      "lon": -77.00746000000001
+     },
+     "intermediateStops": [
+      {
+       "name": "Takoma",
+       "stopId": "us-dc-WMATA-rail_PF_B07_C",
+       "lat": 38.97602,
+       "lon": -77.01813
+      },
+      {
+       "name": "Fort Totten",
+       "stopId": "us-dc-WMATA-rail_PF_B06_C",
+       "lat": 38.951789999999995,
+       "lon": -77.00215
+      },
+      {
+       "name": "Brookland-CUA",
+       "stopId": "us-dc-WMATA-rail_PF_B05_C",
+       "lat": 38.933117,
+       "lon": -76.99453000000001
+      },
+      {
+       "name": "Rhode Island Av",
+       "stopId": "us-dc-WMATA-rail_PF_B04_C",
+       "lat": 38.920906,
+       "lon": -76.99594
+      },
+      {
+       "name": "NoMa-Gallaudet U",
+       "stopId": "us-dc-WMATA-rail_PF_B35_C",
+       "lat": 38.90661,
+       "lon": -77.00331
+      }
+     ]
+    },
+    {
+     "mode": "WALK",
+     "startTime": "2026-11-17T13:51:00Z",
+     "endTime": "2026-11-17T13:55:00Z",
+     "duration": 240,
+     "distance": 267.0,
+     "legGeometry": {
+      "points": "eyc|dVvgsx{l@??v@vFkKt@wj@{Dqa@kG??nv@zSt~@`WbJnBjJtB??zK}w@??xBjBxFrG~OhPrRhLlOpCfOoA~ScHpQeNnI{OhH}YrDsUz@uGvB}Q??oPwE??uZqI??eAY??eSqF??kPoE??ye@yM??asCis@??xI_p@hMu`Axs@uqFvq@ihF??e~Bul@mZ{H??yo@qP}Aa@??vCcT??lAoDfD{B??",
+      "precision": 7,
+      "length": 58
+     },
+     "from": {
+      "name": "Union Station",
+      "stopId": "us-dc-WMATA-rail_PF_B03_C",
+      "lat": 38.897487999999996,
+      "lon": -77.00746000000001
+     },
+     "to": {
+      "name": "END",
+      "lat": 38.8977,
+      "lon": -77.006
+     }
+    }
+   ]
+  },
+  {
+   "duration": 1140,
+   "startTime": "2026-11-17T13:41:00Z",
+   "endTime": "2026-11-17T14:00:00Z",
+   "transfers": 0,
+   "legs": [
+    {
+     "mode": "WALK",
+     "startTime": "2026-11-17T13:41:00Z",
+     "endTime": "2026-11-17T13:42:00Z",
+     "duration": 60,
+     "distance": 36.0,
+     "legGeometry": {
+      "points": "cp|vfVxm~f|l@??e~@jkA??zzArbB",
+      "precision": 7,
+      "length": 5
+     },
+     "from": {
+      "name": "START",
+      "lat": 38.9937,
+      "lon": -77.031
+     },
+     "to": {
+      "name": "Silver Spring",
+      "stopId": "us-dc-WMATA-rail_PF_B08_C",
+      "lat": 38.99369,
+      "lon": -77.03118
+     }
+    },
+    {
+     "mode": "SUBWAY",
+     "startTime": "2026-11-17T13:42:00Z",
+     "endTime": "2026-11-17T13:56:00Z",
+     "duration": 840,
+     "routeShortName": "R",
+     "routeLongName": "Red",
+     "displayName": "R",
+     "agencyName": "WMATA",
+     "headsign": "Shady Grove",
+     "routeColor": "c80f2d",
+     "routeTextColor": "ffffff",
+     "legGeometry": {
+      "points": "gozvfVnfbg|l@~oHgcJ~eRwtT~cXodYziV_tUn{K_vJjuJ_dIf|TwwPrwVwwPz}V_lObiWofNji_@g}Qfa}@oha@b}iAogi@np|BgoeAztI_gE~jHgmEfxGkpEziG{|E~xFgfFzzFg_GvsHgcJfst@wa~@vaLwiMzbHgxGrfHo`G~jH_oFnwHo}E~jH_}DnwHgtDnwHg{CjhI_uCbhx@gzUbfe@ggMzqWowHjo\\g|JbydB_ei@z~l@s_Sf~yAgud@jgy@cbXf|OcjEnyLkeCwBg^vBf^fzAoZf`IwmA~mI_jAftXgbCfkP_jAfbp@_uCnsJ?v~Jvj@zhJfpAzmJ~{Bz~b@vsMzcYrzHvci@brP~p@wjE_q@vjE~yM~fE~tHfjDvyTvlNnvFrkCvcAja@rzHfiBjtHvrAnwH~z@~gG~f@nwHngArbEn}@vlDfpArdDnvAblD~{Bjhg@~m]~fOvoJ~dFvnCfaUf|Jf}QfcJo`BfxGn`BgxGzTvQb|FneBrak@~|NftDbt@f|Ob_CryFnvA~fEvfBb`EvzBjrD~eCfeX~hSn_EnhC~zEvuBr_InhCboY~`Hv}a@roKkCrNjCsNwhAka@",
+      "precision": 7,
+      "length": 98
+     },
+     "from": {
+      "name": "Silver Spring",
+      "stopId": "us-dc-WMATA-rail_PF_B08_C",
+      "lat": 38.99369,
+      "lon": -77.03118
+     },
+     "to": {
+      "name": "Union Station",
+      "stopId": "us-dc-WMATA-rail_PF_B03_C",
+      "lat": 38.897487999999996,
+      "lon": -77.00746000000001
+     },
+     "intermediateStops": [
+      {
+       "name": "Takoma",
+       "stopId": "us-dc-WMATA-rail_PF_B07_C",
+       "lat": 38.97602,
+       "lon": -77.01813
+      },
+      {
+       "name": "Fort Totten",
+       "stopId": "us-dc-WMATA-rail_PF_B06_C",
+       "lat": 38.951789999999995,
+       "lon": -77.00215
+      },
+      {
+       "name": "Brookland-CUA",
+       "stopId": "us-dc-WMATA-rail_PF_B05_C",
+       "lat": 38.933117,
+       "lon": -76.99453000000001
+      },
+      {
+       "name": "Rhode Island Av",
+       "stopId": "us-dc-WMATA-rail_PF_B04_C",
+       "lat": 38.920906,
+       "lon": -76.99594
+      },
+      {
+       "name": "NoMa-Gallaudet U",
+       "stopId": "us-dc-WMATA-rail_PF_B35_C",
+       "lat": 38.90661,
+       "lon": -77.00331
+      }
+     ]
+    },
+    {
+     "mode": "WALK",
+     "startTime": "2026-11-17T13:56:00Z",
+     "endTime": "2026-11-17T14:00:00Z",
+     "duration": 240,
+     "distance": 267.0,
+     "legGeometry": {
+      "points": "eyc|dVvgsx{l@??v@vFkKt@wj@{Dqa@kG??nv@zSt~@`WbJnBjJtB??zK}w@??xBjBxFrG~OhPrRhLlOpCfOoA~ScHpQeNnI{OhH}YrDsUz@uGvB}Q??oPwE??uZqI??eAY??eSqF??kPoE??ye@yM??asCis@??xI_p@hMu`Axs@uqFvq@ihF??e~Bul@mZ{H??yo@qP}Aa@??vCcT??lAoDfD{B??",
+      "precision": 7,
+      "length": 58
+     },
+     "from": {
+      "name": "Union Station",
+      "stopId": "us-dc-WMATA-rail_PF_B03_C",
+      "lat": 38.897487999999996,
+      "lon": -77.00746000000001
+     },
+     "to": {
+      "name": "END",
+      "lat": 38.8977,
+      "lon": -77.006
+     }
+    }
+   ]
+  }
+ ]
+}

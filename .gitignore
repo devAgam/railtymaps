@@ -1,0 +1,11 @@
+node_modules/
+.output/
+.wxt/
+*.zip
+.DS_Store
+
+# Store asset tooling scratch
+scripts/store-assets/.build/
+
+# Local editor and agent settings
+.claude/
