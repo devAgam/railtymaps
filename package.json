@@ -1,8 +1,8 @@
 {
   "name": "railtymaps",
-  "description": "Door-to-door transit times on Zillow and Redfin listings for everyone in your household. Chrome extension, Washington DC area.",
+  "description": "Door-to-door transit times on Zillow and Redfin listings for everyone in your household. Chrome extension for US home search.",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.1.0",
   "type": "module",
   "scripts": {
     "dev": "wxt",

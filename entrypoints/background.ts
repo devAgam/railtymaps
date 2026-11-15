@@ -5,6 +5,7 @@ import { wrapError, wrapOk, type Request } from '../lib/messages';
 import { installUserAgentRule } from '../lib/motis';
 import { prunePlans } from '../lib/plan';
 import { forgetReach } from '../lib/reach';
+import { forgetDrives } from '../lib/street';
 import { currentListingKey, migrate, pageStatusKey } from '../lib/storage';
 import type { Place } from '../lib/types';
 
@@ -44,12 +45,14 @@ export default defineBackground(() => {
     void browser.storage.session.remove([currentListingKey(tabId), pageStatusKey(tabId)]);
   });
 
-  // A deleted place's cached reach is ~1 MB; don't keep it around.
+  // A deleted place's cached reach is ~1 MB; don't keep it, or its drive times, around.
   browser.storage.onChanged.addListener((changes, area) => {
     if (area !== 'local' || !changes.places) return;
     const after = new Set(((changes.places.newValue as Place[] | undefined) ?? []).map((p) => p.id));
     for (const p of (changes.places.oldValue as Place[] | undefined) ?? []) {
-      if (!after.has(p.id)) void forgetReach(p.id);
+      if (after.has(p.id)) continue;
+      void forgetReach(p.id);
+      void forgetDrives(p.id);
     }
   });
 });

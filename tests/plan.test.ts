@@ -48,6 +48,23 @@ describe('groupItineraries', () => {
     expect(options[0].transfers).toBe(1);
   });
 
+  it('with a walking limit, counts walking past it double', () => {
+    // Leaves five minutes later than the bus, but starts with a 20 minute walk.
+    const longWalk: MotisItinerary = {
+      ...raw[0],
+      startTime: '2026-11-17T13:30:00Z',
+      legs: [{ ...raw[0].legs[0], duration: 20 * 60 }, ...raw[0].legs.slice(1)],
+    };
+    const bus: MotisItinerary = {
+      ...raw[0],
+      startTime: '2026-11-17T13:25:00Z',
+      legs: [{ ...raw[0].legs[0] }, { ...raw[0].legs[1], mode: 'BUS', routeShortName: '70' }, { ...raw[0].legs[2] }],
+    };
+    expect(groupItineraries([longWalk, bus], deadline).map((o) => o.signature)).toEqual(['SUBWAY:R', 'BUS:70']);
+    // With a 10 minute limit the long walk costs 30 + 10 extra, the bus 35.
+    expect(groupItineraries([longWalk, bus], deadline, 4, 10).map((o) => o.signature)).toEqual(['BUS:70', 'SUBWAY:R']);
+  });
+
   it('drops anything that arrives after the deadline', () => {
     const late = { ...raw[0], endTime: '2026-11-17T14:10:00Z' };
     expect(groupItineraries([late], deadline)).toEqual([]);

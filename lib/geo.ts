@@ -46,6 +46,13 @@ export function walkRadiusMeters(minutes: number, speed: number): number {
 }
 
 /**
+ * When nothing fits someone's own walking limit, look again allowing this much
+ * walking, so a home just past the limit says how far past it is instead of
+ * showing nothing. Badges (estimate.ts) and trip plans (plan.ts) both use it.
+ */
+export const LONGEST_WALK_MINUTES = 60;
+
+/**
  * Decode a Google-style encoded polyline of any precision
  * (MOTIS uses 7 digits, Google uses 5). Arithmetic instead of bit
  * operations keeps 7-digit longitudes from overflowing 32 bits.

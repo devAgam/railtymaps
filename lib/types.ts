@@ -2,6 +2,9 @@ export type DayType = 'weekday' | 'saturday' | 'sunday';
 
 export type WalkPace = 'slow' | 'relaxed' | 'brisk';
 
+/** How someone gets to a place. */
+export type TravelMode = 'transit' | 'drive' | 'walk';
+
 /** Someone in the household. Walking limits are per person because they really differ. */
 export interface Person {
   id: string;
@@ -25,9 +28,12 @@ export interface Place {
   address: string;
   lat: number;
   lon: number;
-  /** Local wall-clock deadline, "HH:MM" in 24-hour time. */
+  /** Local wall-clock deadline, "HH:MM" in 24-hour time, in the place's own time zone. */
   arriveBy: string;
   day: DayType;
+  /** IANA time zone of the place, e.g. "America/Chicago". */
+  tz: string;
+  mode: TravelMode;
   /** Hidden places keep their routes but drop off the listing badges. */
   enabled: boolean;
 }
@@ -35,7 +41,9 @@ export interface Place {
 export interface Settings {
   showTransitLines: boolean;
   showPins: boolean;
-  /** Place whose reachable area is shaded on the listing map. */
+  /** Shade the area that can reach a place in time (the circles around each stop). */
+  showShading: boolean;
+  /** Which place gets shaded when shading is on. */
   shadePlaceId: string | null;
   /** Upper bounds, in minutes, of the short / medium / long color bands. */
   bands: [number, number, number];
@@ -98,6 +106,11 @@ export interface Estimate {
   transfers?: number;
   modes?: string;
   walkOnly?: boolean;
+  /**
+   * Set when nothing fits the person's walking limit and this time needs a
+   * longer walk: how long that walk is, in minutes.
+   */
+  longWalk?: number;
   /** Set once a full trip plan has replaced the quick estimate. */
   exact?: boolean;
   /** Why there's no number (server down, daily limit...). */
@@ -148,6 +161,8 @@ export interface PlanResult {
   fetchedAt: number;
   deadlineIso: string;
   itineraries: SimpleItinerary[];
+  /** Nothing fit the walking limit, so these trips allow a longer walk. */
+  overLimit?: boolean;
 }
 
 export interface GeocodeResult {
@@ -156,6 +171,8 @@ export interface GeocodeResult {
   lat: number;
   lon: number;
   source: 'census' | 'router';
+  /** Known for router results; looked up separately for Census ones. */
+  tz?: string;
 }
 
 /** What the content script last saw on a tab, so the panel can explain problems. */

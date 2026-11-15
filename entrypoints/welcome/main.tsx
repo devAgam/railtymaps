@@ -32,7 +32,7 @@ function Welcome() {
       <Brand />
       <h1>Transit times on every listing</h1>
       <p className="lede">
-        RailtyMaps adds door-to-door bus, Metro and train times to Zillow and Redfin, for each person in your household and each
+        RailtyMaps adds door-to-door bus, subway and train times to Zillow and Redfin, for each person in your household and each
         place they need to get to.
       </p>
 

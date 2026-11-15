@@ -10,9 +10,9 @@ export const people: Person[] = [
 ];
 
 export const places: Place[] = [
-  { id: 'work', personId: 'me', label: 'Work', address: 'Union Station, Washington, DC', lat: 38.8977, lon: -77.006, arriveBy: '09:00', day: 'weekday', enabled: true },
-  { id: 'clinic', personId: 'mom', label: 'Clinic', address: 'NIH Clinical Center, Bethesda, MD', lat: 39.0004, lon: -77.103, arriveBy: '10:30', day: 'weekday', enabled: true },
-  { id: 'church', personId: 'dad', label: 'Church', address: "St. Matthew's Cathedral, Washington, DC", lat: 38.9067, lon: -77.0396, arriveBy: '10:00', day: 'sunday', enabled: true },
+  { id: 'work', personId: 'me', label: 'Work', address: 'Union Station, Washington, DC', lat: 38.8977, lon: -77.006, arriveBy: '09:00', day: 'weekday', tz: 'America/New_York', mode: 'transit', enabled: true },
+  { id: 'clinic', personId: 'mom', label: 'Clinic', address: 'NIH Clinical Center, Bethesda, MD', lat: 39.0004, lon: -77.103, arriveBy: '10:30', day: 'weekday', tz: 'America/New_York', mode: 'transit', enabled: true },
+  { id: 'church', personId: 'dad', label: 'Church', address: "St. Matthew's Cathedral, Washington, DC", lat: 38.9067, lon: -77.0396, arriveBy: '10:00', day: 'sunday', tz: 'America/New_York', mode: 'transit', enabled: true },
 ];
 
 const now = Date.UTC(2026, 10, 14);

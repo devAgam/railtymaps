@@ -22,6 +22,8 @@ export function reachKey(place: Place, walking: Walking, routerUrl: string): str
     place.lon.toFixed(5),
     place.arriveBy,
     place.day,
+    place.tz,
+    place.mode,
     walking.walkPace,
     walking.maxWalkMinutes,
     walking.stepFree ? 'sf' : 'any',
@@ -59,7 +61,7 @@ export function compactReach(raw: MotisReachable, placeId: string, key: string, 
 }
 
 async function fetchReach(place: Place, walking: Walking, routerUrl: string, key: string): Promise<CompactReach> {
-  const arriveAt = nextServiceTime(place.day, place.arriveBy);
+  const arriveAt = nextServiceTime(place.day, place.arriveBy, new Date(), place.tz);
   const params = new URLSearchParams({
     one: `${place.lat},${place.lon}`,
     arriveBy: 'true',

@@ -50,6 +50,19 @@ export function initials(person: { id: string; name: string } | undefined, peopl
   return clash && name.length > 1 ? first + name[1].toLowerCase() : first;
 }
 
+// The first person is called "Me" unless renamed, and "past Me's limit" reads
+// badly. These two turn it into "your" and "you".
+
+/** "Mom's", or "your" for the person called Me. */
+export function possessive(name: string): string {
+  return name.trim().toLowerCase() === 'me' ? 'your' : `${name}'s`;
+}
+
+/** "Mom", or "you" for the person called Me. */
+export function personRef(name: string): string {
+  return name.trim().toLowerCase() === 'me' ? 'you' : name;
+}
+
 /** "13222 Ewood Ln, Silver Spring, MD 20906" → "13222 Ewood Ln". */
 export function shortAddress(address: string): string {
   return address.split(',')[0]?.trim() || address;

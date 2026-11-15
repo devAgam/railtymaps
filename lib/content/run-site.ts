@@ -59,7 +59,7 @@ async function start(ctx: ContentScriptContext, site: SiteAdapter): Promise<void
   /** Everything that changes the numbers, as opposed to how they're drawn. */
   const estimateInputs = () =>
     JSON.stringify([
-      visiblePlaces().map((p) => [p.id, p.lat, p.lon, p.arriveBy, p.day, p.personId]),
+      visiblePlaces().map((p) => [p.id, p.lat, p.lon, p.arriveBy, p.day, p.tz, p.mode, p.personId]),
       people.map((p) => [p.id, p.walkPace, p.maxWalkMinutes, p.stepFree]),
       settings.routerUrl,
     ]);
@@ -315,10 +315,12 @@ async function start(ctx: ContentScriptContext, site: SiteAdapter): Promise<void
         ? shown.map((p) => ({ lat: p.lat, lon: p.lon, label: p.label, color: personOf(p)?.color ?? '#475569' }))
         : [],
     });
-    const shaded = shown.find((p) => p.id === settings.shadePlaceId);
+    // Shading works for transit and walking; there's no free isochrone data for cars.
+    const shadable = shown.filter((p) => p.mode !== 'drive');
+    const shaded = settings.showShading ? shadable.find((p) => p.id === settings.shadePlaceId) : undefined;
     const legend = {
       activeId: shaded?.id ?? null,
-      options: shown.map((p) => ({ id: p.id, label: `${personOf(p)?.name ?? ''} · ${p.label}`.replace(/^ · /, '') })),
+      options: shadable.map((p) => ({ id: p.id, label: `${personOf(p)?.name ?? ''} · ${p.label}`.replace(/^ · /, '') })),
       bands: [...settings.bands],
     };
     if (!shaded) {
@@ -350,8 +352,10 @@ async function start(ctx: ContentScriptContext, site: SiteAdapter): Promise<void
     if (ev.data.type === 'ready') void syncMap();
     else if (ev.data.type === 'shade') {
       // The legend runs in the page world, so don't trust the id blindly.
+      // Its x turns shading off but remembers the place for next time.
       const id = ev.data.placeId;
-      if (id === null || places.some((p) => p.id === id)) void saveSettings({ shadePlaceId: id });
+      if (id === null) void saveSettings({ showShading: false });
+      else if (places.some((p) => p.id === id)) void saveSettings({ shadePlaceId: id, showShading: true });
     }
   });
 

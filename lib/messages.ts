@@ -6,7 +6,9 @@ export type Request =
   | { type: 'estimate'; homes: ListingPoint[] }
   | { type: 'reachForMap'; placeId: string }
   | { type: 'plan'; home: ListingPoint; placeId: string; allowFetch?: boolean }
-  | { type: 'geocode'; text: string }
+  | { type: 'geocode'; text: string; near?: { lat: number; lon: number } }
+  | { type: 'suggest'; text: string; near?: { lat: number; lon: number } }
+  | { type: 'timezone'; lat: number; lon: number }
   | { type: 'setCurrent'; listing: Listing | null }
   | { type: 'pageStatus'; status: PageStatus }
   | { type: 'openPanel'; listing?: Listing }
@@ -41,6 +43,8 @@ export interface ResponseMap {
   reachForMap: MapReach | null;
   plan: PlanResult | null;
   geocode: GeocodeResult[];
+  suggest: GeocodeResult[];
+  timezone: string | null;
   setCurrent: null;
   pageStatus: null;
   openPanel: { opened: boolean };

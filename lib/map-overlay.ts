@@ -386,7 +386,7 @@ function createLayers(map: google.maps.Map, g: GMaps, onShade: (placeId: string 
           routeLines.push(new g.Polyline({ map, path, strokeOpacity: 0, zIndex: 1002, icons: [{ icon: dash, offset: '0', repeat: '10px' }] }));
         } else {
           routeLines.push(new g.Polyline({ map, path, strokeColor: '#ffffff', strokeOpacity: 1, strokeWeight: 9, zIndex: 1000 }));
-          routeLines.push(new g.Polyline({ map, path, strokeColor: leg.color || '#0f766e', strokeOpacity: 1, strokeWeight: 5, zIndex: 1001 }));
+          routeLines.push(new g.Polyline({ map, path, strokeColor: leg.color || (leg.mode === 'CAR' ? '#1e293b' : '#0f766e'), strokeOpacity: 1, strokeWeight: 5, zIndex: 1001 }));
         }
       }
       // Only move the map if the route doesn't already fit. Moving it makes the

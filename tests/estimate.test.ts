@@ -12,6 +12,8 @@ const place: Place = {
   lon: -77.006,
   arriveBy: '09:00',
   day: 'weekday',
+  tz: 'America/New_York',
+  mode: 'transit',
   enabled: true,
 };
 
@@ -59,8 +61,18 @@ describe('estimateOne', () => {
     // At 0.9 m/s a 10 minute limit is about 415 m: still the near stop, but a longer walk.
     const e = estimateOne(home, place, reach, grid, walking({ walkPace: 'slow', maxWalkMinutes: 10 }));
     expect(e).toMatchObject({ stopName: 'Near stop', walkMinutes: 7, minutes: 27 });
-    // At 6 minutes the near stop is out of reach too.
-    expect(estimateOne(home, place, reach, grid, walking({ walkPace: 'slow', maxWalkMinutes: 6 })).minutes).toBeNull();
+  });
+
+  it('still gives a time past the walking limit, marked with the walk it takes', () => {
+    // With a 6 minute limit nothing fits: the near stop is a 7 minute walk at a slow
+    // pace, the fast one 22. The fast one would save half a minute, so the shorter walk wins.
+    const e = estimateOne(home, place, reach, grid, walking({ walkPace: 'slow', maxWalkMinutes: 6 }));
+    expect(e).toMatchObject({ stopName: 'Near stop', walkMinutes: 7, minutes: 27, longWalk: 7 });
+    // Trips inside the limit are never marked.
+    expect(estimateOne(home, place, reach, grid, walking()).longWalk).toBeUndefined();
+    // An hour on foot is as far as it looks.
+    const farAway = { id: 'h3', lat: north(-5000), lon: home.lon };
+    expect(estimateOne(farAway, place, reach, grid, walking()).minutes).toBeNull();
   });
 
   it('says out of range when nothing is reachable', () => {
@@ -101,8 +113,13 @@ describe('estimateFromPlan', () => {
         },
       ],
     };
-    expect(estimateFromPlan(plan)).toMatchObject({ placeId: 'work', minutes: 19, exact: true, stopName: 'Silver Spring', transfers: 0 });
-    expect(estimateFromPlan({ ...plan, itineraries: [] })).toBeNull();
+    expect(estimateFromPlan(plan, 'work')).toMatchObject({ placeId: 'work', minutes: 19, exact: true, stopName: 'Silver Spring', walkMinutes: 1, transfers: 0 });
+    expect(estimateFromPlan(plan, 'work')?.longWalk).toBeUndefined();
+    // A plan that had to allow a longer walk says how long.
+    expect(estimateFromPlan({ ...plan, overLimit: true }, 'work')).toMatchObject({ minutes: 19, longWalk: 4 });
+    // A place re-added at the same spot gets a new id but reuses the cached plan.
+    expect(estimateFromPlan(plan, 'work-again')?.placeId).toBe('work-again');
+    expect(estimateFromPlan({ ...plan, itineraries: [] }, 'work')).toBeNull();
   });
 });
 

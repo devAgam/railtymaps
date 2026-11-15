@@ -5,11 +5,11 @@ import { ISSUES_URL, PRIVACY_URL, REPO_URL } from '../../lib/app';
 import { BAND_FILLS } from '../../lib/map-types';
 import { send, type Usage } from '../../lib/messages';
 import { exportData, importData, resetAll, saveSettings, TRANSITOUS_URL } from '../../lib/storage';
-import type { Settings } from '../../lib/types';
+import type { Person, Place, Settings } from '../../lib/types';
 
 const BAND_NAMES = ['Short', 'Medium', 'Long'];
 
-export function SettingsView({ settings: s, usage }: { settings: Settings; usage: Usage | null }) {
+export function SettingsView({ settings: s, usage, places, people }: { settings: Settings; usage: Usage | null; places: Place[]; people: Person[] }) {
   const [router, setRouter] = useState(s.routerUrl);
   const [bands, setBands] = useState(s.bands.map(String));
   const [note, setNote] = useState<{ text: string; error?: boolean } | null>(null);
@@ -53,6 +53,7 @@ export function SettingsView({ settings: s, usage }: { settings: Settings; usage
   };
 
   const isTransitous = s.routerUrl === TRANSITOUS_URL;
+  const shadable = places.filter((p) => p.enabled && p.mode !== 'drive');
   const pct = usage ? Math.min(100, (usage.count / usage.limit) * 100) : 0;
 
   return (
@@ -70,6 +71,31 @@ export function SettingsView({ settings: s, usage }: { settings: Settings; usage
           <div className="settings-item">
             <div className="main">Pins for your places</div>
             <Switch label="Pins for your places" checked={s.showPins} onChange={(v) => void saveSettings({ showPins: v })} />
+          </div>
+          <div className="settings-item col">
+            <div className="row">
+              <div className="main">
+                Reach shading
+                <div className="hint">Shade where you can live and still get to a place in time</div>
+              </div>
+              <Switch
+                label="Reach shading"
+                checked={s.showShading && !!shadable.length}
+                onChange={(v) => void saveSettings({ showShading: v, shadePlaceId: s.shadePlaceId ?? shadable[0]?.id ?? null })}
+              />
+            </div>
+            {s.showShading && shadable.length > 1 && (
+              <label>
+                <span className="sr-only">Place to shade</span>
+                <select className="input" value={s.shadePlaceId ?? ''} onChange={(e) => void saveSettings({ shadePlaceId: e.target.value })}>
+                  {shadable.map((p) => (
+                    <option key={p.id} value={p.id}>
+                      {people.find((x) => x.id === p.personId)?.name ?? ''} · {p.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            )}
           </div>
           <div className="settings-item col">
             <div>
