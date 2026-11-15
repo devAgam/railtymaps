@@ -77,6 +77,8 @@ export interface BadgeHandlers {
   onOpen(): void;
   onToggleSave(): void;
   onSetup(): void;
+  /** The floating card's ×, called after the card is off the page. */
+  onClose?(): void;
 }
 
 function esc(s: string): string {
@@ -170,7 +172,10 @@ function wire(root: ShadowRoot, h: BadgeHandlers): void {
     if (act === 'open') h.onOpen();
     else if (act === 'save') h.onToggleSave();
     else if (act === 'setup') h.onSetup();
-    else if (act === 'close') (root.host as HTMLElement).remove();
+    else if (act === 'close') {
+      (root.host as HTMLElement).remove();
+      h.onClose?.();
+    }
   });
 }
 

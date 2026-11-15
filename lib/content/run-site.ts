@@ -45,6 +45,10 @@ async function start(ctx: ContentScriptContext, site: SiteAdapter): Promise<void
   const pending = new Set<string>();
   let inflight = false;
   let detail: (Entry & { host: HTMLElement; listing: Listing | null; note?: string }) | null = null;
+  // Homes whose floating card was closed with its ×. It stays closed for that
+  // home, even on coming back to it, until the page reloads. Other homes still
+  // get their card.
+  const closedCards = new Set<string>();
 
   const visiblePlaces = () => places.filter((p) => p.enabled);
 
@@ -270,7 +274,10 @@ async function start(ctx: ContentScriptContext, site: SiteAdapter): Promise<void
       return;
     }
     if (detail?.id === id) {
-      if (!detail.host.isConnected) document.body.appendChild(detail.host);
+      // The sites sometimes replace whole chunks of the page and take the card
+      // with them, so put it back. Not if the person closed it, though: their
+      // own click is a DOM change too, and used to bring it straight back.
+      if (!detail.host.isConnected && !closedCards.has(id)) document.body.appendChild(detail.host);
       return;
     }
     detail?.host.remove();
@@ -280,8 +287,9 @@ async function start(ctx: ContentScriptContext, site: SiteAdapter): Promise<void
         if (detail?.listing) void toggleSaved(detail.listing);
       },
       onSetup: () => openPanel(),
+      onClose: () => closedCards.add(id),
     });
-    document.body.appendChild(host);
+    if (!closedCards.has(id)) document.body.appendChild(host);
     detail = { host, root, id, listing: null };
     renderDetail();
 
