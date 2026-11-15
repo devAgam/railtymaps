@@ -1,7 +1,8 @@
 """Draw the RailtyMaps toolbar icons (a house above a transit line) as PNGs.
 
 Pure standard library so it runs anywhere: python3 scripts/make-icons.py
-Writes public/icon/{16,32,48,96,128}.png.
+Writes public/icon/{16,32,48,96,128}.png, and store/icon-128.png for the Chrome Web Store
+listing: the icon at 96px inside 16px of transparent padding, as the store's image guidelines ask.
 """
 
 import os
@@ -83,13 +84,35 @@ def png(size, raw):
     return b"\x89PNG\r\n\x1a\n" + chunk(b"IHDR", header) + chunk(b"IDAT", zlib.compress(raw, 9)) + chunk(b"IEND", b"")
 
 
+def padded(size, inner):
+    """The icon drawn at `inner` px, centered on a transparent square of `size` px (raw PNG rows)."""
+    raw = render(inner)
+    stride = 1 + inner * 4  # each row starts with its filter byte
+    pad = (size - inner) // 2
+    left, right = bytes(pad * 4), bytes((size - inner - pad) * 4)
+    rows = []
+    for y in range(size):
+        if pad <= y < pad + inner:
+            start = (y - pad) * stride + 1
+            rows.append(b"\x00" + left + raw[start:start + inner * 4] + right)
+        else:
+            rows.append(b"\x00" + bytes(size * 4))
+    return b"".join(rows)
+
+
 def main():
-    out_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "public", "icon")
+    root = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
+    out_dir = os.path.join(root, "public", "icon")
     os.makedirs(out_dir, exist_ok=True)
     for size in SIZES:
         with open(os.path.join(out_dir, f"{size}.png"), "wb") as f:
             f.write(png(size, render(size)))
     print("wrote", ", ".join(f"{s}.png" for s in SIZES), "to", os.path.normpath(out_dir))
+
+    store_icon = os.path.join(root, "store", "icon-128.png")
+    with open(store_icon, "wb") as f:
+        f.write(png(128, padded(128, 96)))
+    print("wrote", os.path.normpath(store_icon))
 
 
 if __name__ == "__main__":
