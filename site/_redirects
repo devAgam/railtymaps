@@ -1,0 +1,5 @@
+# Short links for Cloudflare Pages.
+# https://developers.cloudflare.com/pages/configuration/redirects/
+/download        https://github.com/devAgam/railtymaps/releases/latest  302
+/github          https://github.com/devAgam/railtymaps                  302
+/privacy-policy  /privacy/                                              301

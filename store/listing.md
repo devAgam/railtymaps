@@ -92,7 +92,8 @@ Then certify all three:
 - I do not use or transfer user data for purposes that are unrelated to my item's single purpose.
 - I do not use or transfer user data to determine creditworthiness or for lending purposes.
 
-**Privacy policy URL:** https://github.com/devAgam/railtymaps/blob/main/PRIVACY.md
+**Privacy policy URL:** https://railtymaps.com/privacy/ once the website is live (until then,
+https://github.com/devAgam/railtymaps/blob/main/PRIVACY.md)
 
 ## Distribution tab
 

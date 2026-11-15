@@ -16,7 +16,7 @@ anywhere by RailtyMaps.
 - **Settings:** map options, color bands and the routing server address.
 - **Cached results:** transit data for your places and trip plans for homes you looked at, kept for up to a week so
   the same question isn't asked twice.
-- **A count of recent trip searches** (timestamps only), used to stay under the daily limit described below.
+- **A count of recent trip searches** (timestamps only), used to stay under the routing server's daily limit.
 
 The home you're currently looking at, per tab, is held in session storage and cleared when the tab or browser closes.
 
