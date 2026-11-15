@@ -188,5 +188,8 @@ export interface MotisMatch {
   street?: string;
   houseNumber?: string;
   zip?: string;
+  /** ISO country code, e.g. "US". */
+  country?: string;
+  tz?: string;
   areas?: { name: string; adminLevel?: number; default?: boolean }[];
 }

@@ -6,25 +6,29 @@ Transit times on Zillow and Redfin listings, for everyone in your household.
 
 If someone you live with gets around by bus and Metro, house hunting turns into copy and paste: find a listing, paste
 the address into a trip planner, check each place they need to get to, then do it all again for the next listing.
-RailtyMaps does that part. Every listing card gets a time for each person and each place, the map shades the area that
-can get there on time, and a side panel has the actual routes.
+RailtyMaps does that part. Every listing card gets a time for each person and each place (by transit, car or on foot),
+the map shades the area that can get there on time, and a side panel has the actual routes.
 
-It covers the Washington, DC area: Metro and Metrobus, MARC, VRE, Ride On, Fairfax Connector, ART, DASH, TheBus and the
-smaller county systems. Other regions are a matter of time zones and testing more than code (see
-[Limitations](#limitations)).
+It works anywhere in the US that [Transitous](https://transitous.org/sources/) has schedules for, which today is about
+350 transit feeds across 41 states and DC: New York, LA, the Bay Area, Chicago, Boston, Philadelphia, Seattle, Portland,
+Denver, Atlanta, Phoenix, Minneapolis, the big Texas and Florida metros, and many smaller systems. It was built and tested
+most heavily in the Washington, DC area.
 
 ## What you get
 
 - **A time on every search result.** One pill per place, like "Mom · Clinic · ~41", colored from green to red. Hover
   for the stop and the walk; click for routes.
 - **The map, shaded.** Pick a place and the listing map shows where you can live and still get there on time, in
-  30, 45 and 60 minute bands. Metro, rail and bus lines are drawn on top, and each place gets a pin.
+  30, 45 and 60 minute bands. Metro, rail and bus lines are drawn on top, and each place gets a pin. All three can be
+  switched off in Settings, and the shading also has an off switch on the map itself.
 - **Routes for one home.** When to leave, every walk and ride ("Ride On 14, then the Red Line"), transfers, total
   walking, and when the same trip runs earlier or later. "Show on map" draws it on the listing map.
 - **Saved homes, side by side.** Star the ones you like. The Saved tab ranks them by average or worst trip and copies a
   plain-text summary you can paste into a family group chat.
 - **People, not just places.** Each person has their own walking pace, longest walk and step-free setting, because a
   10-minute walk for one person is a 20-minute walk for another.
+- **Drive or walk, too.** Any place can be set to driving or walking instead of transit, so the person who drives to
+  work and the one who walks to school show up on the same card.
 
 ## Install
 
@@ -55,8 +59,18 @@ minutes.
 Times without a ~ come from a full trip plan, which runs when you open a home in the side panel or ask for exact times on
 the Saved tab.
 
+If nothing fits someone's walking limit, RailtyMaps doesn't just say "90+". It looks again allowing up to an hour on foot
+and shows that time with a dashed outline and a warning mark: the trip works, but only with a longer walk than that
+person can comfortably do. The side panel shows those routes too, with the long walk called out, so you can tell a stop
+that's two minutes too far from one that's twenty.
+
+Driving places work the same way, with a road route instead of a transit trip. Every listing on the page is routed to
+the place in one batch request, and the answers are cached for a month. These are free-flow times: the free routing
+data has no traffic, so expect rush hour to take longer. Walking places are estimated from distance at the person's
+pace, and the side panel shows the actual walking route.
+
 Schedules are the agencies' published timetables for the next ordinary Tuesday or Wednesday (or the next Saturday or
-Sunday for weekend places). Live delays aren't included.
+Sunday for weekend places), in each place's own time zone. Live delays aren't included.
 
 ## How it fits together
 
@@ -102,9 +116,9 @@ server (it has the same API, so you just change the routing server in Settings) 
 
 ## Privacy
 
-Your people, places and saved homes stay in your browser. The routing server gets coordinates, and the Census geocoder
-gets addresses you search for. There's no account, no analytics and no server of ours. Details are in
-[PRIVACY.md](PRIVACY.md).
+Your people, places and saved homes stay in your browser. The routing server gets coordinates and what you type into
+place search, and the Census geocoder gets addresses you search for. There's no account, no analytics and no server of
+ours. Details are in [PRIVACY.md](PRIVACY.md).
 
 ## Development
 
@@ -129,8 +143,10 @@ the badge goes, and how to recognize a home's own page. If the site uses Google 
 
 ## Limitations
 
-- **DC area only, for now.** Times are computed in Eastern time and the address search is limited to about 100 miles
-  around DC. Transitous covers most US metros, so other regions mostly need per-place time zones and some testing.
+- **Coverage follows Transitous.** If an agency's schedules aren't in Transitous, its buses and trains won't show up,
+  and a place with no transit data nearby says so instead of showing a time. Their [source list](https://transitous.org/sources/)
+  shows what's included; new feeds can be added there.
+- **US only.** Address search uses the US Census geocoder, and the holiday handling follows US federal holidays.
 - **Arrive-by only.** No return trips yet ("leave work at 5 PM").
 - **Site changes.** Zillow and Redfin change their pages without notice. When that breaks something, the panel says it
   couldn't read the page instead of failing quietly. Please open an issue.

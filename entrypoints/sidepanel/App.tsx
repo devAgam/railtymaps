@@ -3,7 +3,7 @@ import { Icon } from '../../components/Icon';
 import { Banner, Brand } from '../../components/ui';
 import { ISSUES_URL } from '../../lib/app';
 import { currentListingKey, listingKey, pageStatusKey, TRANSITOUS_URL } from '../../lib/storage';
-import { formatClock } from '../../lib/time';
+import { browserTimeZone, formatClock } from '../../lib/time';
 import type { Listing, PageStatus, Person, Place, SavedHome } from '../../lib/types';
 import { useActiveTabId, useSettings, useStored, useUsage } from './hooks';
 import { Onboarding } from './Onboarding';
@@ -79,7 +79,7 @@ export function App() {
       <main>
         {paused && (
           <Banner kind="warn" icon="alert">
-            <b>New trip searches are paused{usage.resetsAt ? ` until about ${formatClock(new Date(usage.resetsAt).toISOString())}` : ''}.</b>{' '}
+            <b>New trip searches are paused{usage.resetsAt ? ` until about ${formatClock(new Date(usage.resetsAt).toISOString(), browserTimeZone())}` : ''}.</b>{' '}
             You've used {usage.count} in the last day, the most RailtyMaps sends to the free routing service. Badges and saved routes
             still work.
           </Banner>
@@ -108,7 +108,7 @@ export function App() {
           <Saved saved={saved} people={people} places={places} settings={settings} usage={usage} tabId={tabId} onOpenHome={() => setView('home')} />
         )}
         {view === 'people' && <People people={people} places={places} settings={settings} />}
-        {view === 'settings' && <SettingsView settings={settings} usage={usage} />}
+        {view === 'settings' && <SettingsView settings={settings} usage={usage} places={places} people={people} />}
       </main>
     </div>
   );

@@ -84,6 +84,7 @@ export function Saved({ saved, people, places, settings, usage, tabId, onOpenHom
     visible.filter((p) => !est?.find((e) => e.placeId === p.id)?.exact).map((place) => ({ home, place })),
   );
   const remaining = usage ? Math.max(0, usage.limit - usage.count) : null;
+  const anyLongWalk = rows.some(({ est }) => est?.some((e) => e.longWalk));
 
   const getExact = async () => {
     setError('');
@@ -101,18 +102,20 @@ export function Saved({ saved, people, places, settings, usage, tabId, onOpenHom
   };
 
   const copySummary = async () => {
-    const header = ['Home', 'Price', ...visible.map((p) => `${people.find((x) => x.id === p.personId)?.name ?? ''} ${p.label}`.trim())];
+    const how = { transit: '', drive: ' (car)', walk: ' (on foot)' } as const;
+    const header = ['Home', 'Price', ...visible.map((p) => `${people.find((x) => x.id === p.personId)?.name ?? ''} ${p.label}${how[p.mode]}`.trim())];
     const lines = rows.map(({ home, est }) => [
       shortAddress(home.address),
       home.price ? `$${Math.round(home.price / 1000)}k` : '',
       ...visible.map((p) => {
         const e = est?.find((x) => x.placeId === p.id);
         if (!e || e.error) return '?';
-        return e.minutes == null ? '90+ min' : `${e.exact ? '' : '~'}${e.minutes} min`;
+        if (e.minutes == null) return '90+ min';
+        return `${e.exact ? '' : '~'}${e.minutes} min${e.longWalk ? ` (${e.longWalk} min walk)` : ''}`;
       }),
     ]);
     const text = [header, ...lines].map((cols) => cols.join('\t')).join('\n');
-    await navigator.clipboard.writeText(`${text}\n\nMinutes to leave before each deadline, by transit. From RailtyMaps.`);
+    await navigator.clipboard.writeText(`${text}\n\nMinutes to leave before each deadline, by transit unless marked. From RailtyMaps.`);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -227,6 +230,12 @@ export function Saved({ saved, people, places, settings, usage, tabId, onOpenHom
       <p className="fine">
         Minutes before each deadline the person has to leave home. "~" is a quick estimate, usually within a couple of minutes of the
         full plan.
+        {anyLongWalk && (
+          <>
+            {' '}
+            A dashed outline with <Icon name="alert" size={11} /> means the trip only works with a longer walk than that person's limit.
+          </>
+        )}
       </p>
     </>
   );

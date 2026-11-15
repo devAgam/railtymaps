@@ -7,6 +7,14 @@ import { DAY_LABEL, formatHhmm } from '../../lib/time';
 import type { Person, Place, Settings } from '../../lib/types';
 import { PersonFields, PlaceForm } from './forms';
 
+/** Where to bias address search: the place itself, this person's other places, then anyone's. */
+function nearFor(place: Place | undefined, personId: string, places: Place[]) {
+  const ref = place ?? places.find((p) => p.personId === personId) ?? places[0];
+  return ref ? { lat: ref.lat, lon: ref.lon } : undefined;
+}
+
+const MODE_LABEL = { transit: 'Transit', drive: 'Drive', walk: 'Walk' } as const;
+
 type Editing = { kind: 'person'; person: Person; isNew: boolean } | { kind: 'place'; place?: Place; personId: string } | null;
 
 export function People({ people, places, settings }: { people: Person[]; places: Place[]; settings: Settings }) {
@@ -42,6 +50,7 @@ export function People({ people, places, settings }: { people: Person[]; places:
         <h1 className="page-title">{isNew ? `New place for ${people.find((p) => p.id === editing.personId)?.name ?? 'someone'}` : 'Edit place'}</h1>
         <PlaceForm
           people={people}
+          near={nearFor(editing.place, editing.personId, places)}
           initial={editing.place}
           personId={editing.personId}
           pickPerson={!isNew}
@@ -49,7 +58,7 @@ export function People({ people, places, settings }: { people: Person[]; places:
           onCancel={() => setEditing(null)}
           onSave={async (place) => {
             await savePlaces(isNew ? [...places, place] : places.map((p) => (p.id === place.id ? place : p)));
-            if (!settings.shadePlaceId) await saveSettings({ shadePlaceId: place.id });
+            if (!settings.shadePlaceId) await saveSettings({ shadePlaceId: place.id, showShading: true });
             setEditing(null);
           }}
           onDelete={
@@ -67,7 +76,9 @@ export function People({ people, places, settings }: { people: Person[]; places:
     );
   }
 
-  const toggleShade = (place: Place) => void saveSettings({ shadePlaceId: settings.shadePlaceId === place.id ? null : place.id });
+  const isShaded = (place: Place) => settings.showShading && settings.shadePlaceId === place.id;
+  const toggleShade = (place: Place) =>
+    void saveSettings(isShaded(place) ? { showShading: false } : { shadePlaceId: place.id, showShading: true });
   const toggleVisible = (place: Place) => void savePlaces(places.map((p) => (p.id === place.id ? { ...p, enabled: !p.enabled } : p)));
 
   return (
@@ -103,15 +114,16 @@ export function People({ people, places, settings }: { people: Person[]; places:
                     {!place.enabled && <span className="hint"> · hidden from listings</span>}
                   </div>
                   <div className="hint truncate">
-                    By {formatHhmm(place.arriveBy)} · {DAY_LABEL[place.day]} · {place.address}
+                    {MODE_LABEL[place.mode]} · by {formatHhmm(place.arriveBy)} · {DAY_LABEL[place.day]} · {place.address}
                   </div>
                 </div>
                 <button
                   type="button"
                   className="btn icon-btn"
-                  aria-pressed={settings.shadePlaceId === place.id}
-                  aria-label={settings.shadePlaceId === place.id ? `Stop shading ${place.label} on the map` : `Shade ${place.label} on the map`}
-                  title="Shade on the map"
+                  disabled={place.mode === 'drive'}
+                  aria-pressed={isShaded(place)}
+                  aria-label={isShaded(place) ? `Stop shading ${place.label} on the map` : `Shade ${place.label} on the map`}
+                  title={place.mode === 'drive' ? 'Shading is for transit and walking places' : 'Shade on the map'}
                   onClick={() => toggleShade(place)}
                 >
                   <Icon name="layers" size={16} />

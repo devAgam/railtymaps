@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { formatHhmm, formatMinutes, nextServiceTime, tzOffsetMinutes, zonedToUtc } from '../lib/time';
+import { formatClock, formatHhmm, formatMinutes, nextServiceTime, tzOffsetMinutes, zonedToUtc } from '../lib/time';
 
 const NY = 'America/New_York';
 
@@ -66,5 +66,34 @@ describe('formatting', () => {
     expect(formatMinutes(45)).toBe('45 min');
     expect(formatMinutes(65)).toBe('1 hr 5 min');
     expect(formatMinutes(120)).toBe('2 hr');
+  });
+});
+
+describe('other time zones', () => {
+  // Saturday Nov 14 2026, so the next weekday slot is Tuesday Nov 17.
+  const saturday = new Date('2026-11-14T21:00:00Z');
+
+  it('plans each place in its own zone', () => {
+    expect(nextServiceTime('weekday', '09:00', saturday, 'America/Chicago').toISOString()).toBe('2026-11-17T15:00:00.000Z');
+    expect(nextServiceTime('weekday', '09:00', saturday, 'America/Los_Angeles').toISOString()).toBe('2026-11-17T17:00:00.000Z');
+    expect(nextServiceTime('weekday', '09:00', saturday, 'Pacific/Honolulu').toISOString()).toBe('2026-11-17T19:00:00.000Z');
+  });
+
+  it('handles Arizona, which skips daylight time', () => {
+    // July: Phoenix stays at UTC-7 while Denver moves to UTC-6.
+    const july = new Date('2027-07-10T18:00:00Z');
+    expect(nextServiceTime('weekday', '09:00', july, 'America/Phoenix').toISOString()).toBe('2027-07-13T16:00:00.000Z');
+    expect(nextServiceTime('weekday', '09:00', july, 'America/Denver').toISOString()).toBe('2027-07-13T15:00:00.000Z');
+  });
+
+  it('uses the local calendar date, not UTC, to pick tomorrow', () => {
+    // 10 PM Monday in Los Angeles is already Tuesday in UTC; the next slot is still Tuesday (tomorrow) there.
+    const lateMonday = new Date('2026-11-17T06:00:00Z');
+    expect(nextServiceTime('weekday', '09:00', lateMonday, 'America/Los_Angeles').toISOString()).toBe('2026-11-17T17:00:00.000Z');
+  });
+
+  it("formats times in the place's zone", () => {
+    expect(formatClock('2026-11-17T17:00:00.000Z', 'America/Los_Angeles')).toBe('9:00 AM');
+    expect(formatClock('2026-11-17T17:00:00.000Z', 'America/New_York')).toBe('12:00 PM');
   });
 });

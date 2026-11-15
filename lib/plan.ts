@@ -1,5 +1,5 @@
 import { browser } from 'wxt/browser';
-import { WALK_SPEED } from './geo';
+import { LONGEST_WALK_MINUTES, WALK_SPEED } from './geo';
 import { LOCAL_TRANSIT_MODES, motisGet, type MotisItinerary, type MotisLeg, type MotisPlan } from './motis';
 import { reachKey } from './reach';
 import { nextServiceTime } from './time';
@@ -16,7 +16,8 @@ const PLAN_TTL_MS = 7 * 24 * 3600 * 1000;
 const SEARCH_WINDOW_S = 45 * 60;
 
 export function planKey(home: ListingPoint, place: Place, walking: Walking, routerUrl: string): string {
-  return ['p2', home.lat.toFixed(5), home.lon.toFixed(5), reachKey(place, walking, routerUrl)].join('|');
+  // p3: transit plans may fall back to a longer walk; the new prefix retires older cached answers.
+  return ['p3', home.lat.toFixed(5), home.lon.toFixed(5), reachKey(place, walking, routerUrl)].join('|');
 }
 
 export function planStorageKey(home: ListingPoint, place: Place, walking: Walking, routerUrl: string): string {
@@ -74,8 +75,11 @@ export function simplifyItinerary(it: MotisItinerary, deadline: Date): SimpleIti
  * MOTIS returns the same route several times at different departure times.
  * Collapse those into one option (keeping the latest departure that still makes
  * the deadline) and list the rest as other departures. Best option first.
+ *
+ * With a `walkLimit`, walking past it counts double when ranking, the same way
+ * quick estimates rank stops (estimate.ts).
  */
-export function groupItineraries(raw: MotisItinerary[], deadline: Date, limit = 4): SimpleItinerary[] {
+export function groupItineraries(raw: MotisItinerary[], deadline: Date, limit = 4, walkLimit = Infinity): SimpleItinerary[] {
   const groups = new Map<string, SimpleItinerary[]>();
   for (const it of raw) {
     if (Date.parse(it.endTime) > deadline.getTime() + 60_000) continue;
@@ -87,35 +91,68 @@ export function groupItineraries(raw: MotisItinerary[], deadline: Date, limit = 
     const others = [...new Set(list.slice(1).map((x) => x.departIso))].sort();
     return { ...list[0], alsoDepartsIso: others };
   });
-  options.sort((a, b) => a.leadMinutes - b.leadMinutes || a.transfers - b.transfers || a.walkMinutes - b.walkMinutes);
+  const cost = (o: SimpleItinerary) => o.leadMinutes + Math.max(0, o.longestWalkMinutes - walkLimit);
+  options.sort((a, b) => cost(a) - cost(b) || a.transfers - b.transfers || a.walkMinutes - b.walkMinutes);
   return options.slice(0, limit);
 }
 
-async function fetchPlan(home: ListingPoint, place: Place, walking: Walking, routerUrl: string): Promise<PlanResult> {
-  const deadline = nextServiceTime(place.day, place.arriveBy);
-  const walkSeconds = String(walking.maxWalkMinutes * 60);
+// How far to plan a drive or a walk. A long drive still gets its route (DC to
+// New York is about four hours); a walk stops at two.
+const MAX_DIRECT_SECONDS = { drive: 6 * 3600, walk: 2 * 3600 } as const;
+
+function planParams(home: ListingPoint, place: Place, walking: Walking, deadline: Date, maxWalkMinutes = walking.maxWalkMinutes): URLSearchParams {
   const params = new URLSearchParams({
     fromPlace: `${home.lat},${home.lon}`,
     toPlace: `${place.lat},${place.lon}`,
     time: deadline.toISOString(),
     arriveBy: 'true',
-    searchWindow: String(SEARCH_WINDOW_S),
     pedestrianSpeed: String(WALK_SPEED[walking.walkPace]),
-    maxPreTransitTime: walkSeconds,
-    maxPostTransitTime: walkSeconds,
-    maxDirectTime: walkSeconds,
-    transitModes: LOCAL_TRANSIT_MODES,
     detailedTransfers: 'false',
     joinInterlinedLegs: 'true',
   });
   if (walking.stepFree) params.set('pedestrianProfile', 'WHEELCHAIR');
-  const raw = await motisGet<MotisPlan>(routerUrl, '/api/v6/plan', params, { heavy: true });
+  if (place.mode === 'transit') {
+    const walkSeconds = String(maxWalkMinutes * 60);
+    params.set('searchWindow', String(SEARCH_WINDOW_S));
+    params.set('maxPreTransitTime', walkSeconds);
+    params.set('maxPostTransitTime', walkSeconds);
+    params.set('maxDirectTime', walkSeconds);
+    params.set('transitModes', LOCAL_TRANSIT_MODES);
+  } else {
+    // An empty transitModes means street routing only.
+    params.set('transitModes', '');
+    params.set('directModes', place.mode === 'drive' ? 'CAR' : 'WALK');
+    params.set('maxDirectTime', String(MAX_DIRECT_SECONDS[place.mode]));
+  }
+  return params;
+}
+
+async function fetchPlan(home: ListingPoint, place: Place, walking: Walking, routerUrl: string): Promise<PlanResult> {
+  const deadline = nextServiceTime(place.day, place.arriveBy, new Date(), place.tz);
+  const ask = async (longerWalk?: number) => {
+    const params = planParams(home, place, walking, deadline, longerWalk);
+    const raw = await motisGet<MotisPlan>(routerUrl, '/api/v6/plan', params, { heavy: true });
+    const all = [...(raw.direct ?? []), ...(raw.itineraries ?? [])];
+    // Once a longer walk is allowed, rank trips by how far past the limit they go, too.
+    return groupItineraries(all, deadline, 4, longerWalk ? walking.maxWalkMinutes : Infinity);
+  };
+  let itineraries = await ask();
+  let overLimit = false;
+  // Nothing fits their walking limit. "No route" doesn't say whether the stop
+  // is 2 minutes too far or 40, so ask again with up to an hour's walk and let
+  // the panel show those trips, marked. Costs a second search only for homes
+  // that need it.
+  if (!itineraries.length && place.mode === 'transit' && walking.maxWalkMinutes < LONGEST_WALK_MINUTES) {
+    itineraries = await ask(LONGEST_WALK_MINUTES);
+    overLimit = itineraries.length > 0;
+  }
   return {
     key: planKey(home, place, walking, routerUrl),
     placeId: place.id,
     fetchedAt: Date.now(),
     deadlineIso: deadline.toISOString(),
-    itineraries: groupItineraries([...(raw.direct ?? []), ...(raw.itineraries ?? [])], deadline),
+    itineraries,
+    ...(overLimit ? { overLimit } : {}),
   };
 }
 

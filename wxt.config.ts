@@ -7,7 +7,7 @@ export default defineConfig({
     name: 'RailtyMaps: transit times for home search',
     short_name: 'RailtyMaps',
     description:
-      'Door-to-door transit times from Zillow and Redfin listings to the places everyone in your household goes. Washington, DC area.',
+      'Transit, driving and walking times from Zillow and Redfin listings to the places everyone in your household goes. Most US metros.',
     homepage_url: 'https://github.com/devAgam/railtymaps',
     // sidePanel.open() from a content-script click needs 116.
     minimum_chrome_version: '116',

@@ -16,6 +16,7 @@ export const ICONS = {
   metro: [r(5, 3, 14, 14, 4), p('M5 10.5h14'), p('m9 21 1.5-4'), p('m15 21-1.5-4'), c(9, 13.5, 0.9, true), c(15, 13.5, 0.9, true)],
   rail: [r(5, 4, 14, 12, 2), p('M5 9.5h14'), p('m8 21 2-5'), p('m16 21-2-5'), p('M7 19h10')],
   tram: [r(6, 6, 12, 11, 2), p('M9 3h6'), p('M12 3v3'), p('M6 11.5h12'), p('m9 21 1.5-4'), p('m15 21-1.5-4')],
+  car: [p('M3 16.5V13l2.2-5.2A2 2 0 0 1 7 6.5h10a2 2 0 0 1 1.8 1.3L21 13v3.5'), p('M3 13h18'), c(7.5, 16.5, 1.7), c(16.5, 16.5, 1.7)],
   ferry: [p('m4 15 2-6h12l2 6'), p('M12 9V5'), p('M3 19c1.5 1 3 1 4.5 0s3-1 4.5 0 3 1 4.5 0 3-1 4.5 0')],
   star: [p('m12 3.2 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17.2l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z')],
   x: [p('m6 6 12 12'), p('M18 6 6 18')],
@@ -49,6 +50,7 @@ export type IconName = keyof typeof ICONS;
 /** Icon for a transit mode as MOTIS names it. */
 export function modeIcon(mode: string | undefined): IconName {
   if (!mode || mode === 'WALK') return 'walk';
+  if (mode === 'CAR') return 'car';
   if (mode === 'SUBWAY' || mode === 'METRO') return 'metro';
   if (mode === 'TRAM') return 'tram';
   if (mode === 'FERRY') return 'ferry';

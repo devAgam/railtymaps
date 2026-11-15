@@ -1,6 +1,7 @@
 import { bandIndex } from '../estimate';
 import { DAY_LABEL, formatHhmm } from '../time';
 import type { Estimate, Person, Place } from '../types';
+import { possessive } from '../util';
 import { iconSvg } from './icons';
 
 // The pills that go on listing cards, and the floating card on a home's own
@@ -28,6 +29,8 @@ button:focus-visible { outline: 2px solid #1d4ed8; outline-offset: 2px; }
 .b2 { background: #ffedd5; border-color: #fdba74; color: #9a3412; }
 .b3 { background: #ffe4e6; border-color: #fda4af; color: #9f1239; }
 .bn { background: #f1f5f9; border-color: #cbd5e1; color: #475569; }
+.long { border-style: dashed; }
+.warn { display: inline-flex; margin-left: -2px; }
 .more { padding: 2px 9px; }
 .row.overlay { margin: 0; padding: 0; border-top: 0; }
 .overlay .pill, .overlay .save { box-shadow: 0 1px 4px rgba(15,23,42,.35); }
@@ -80,13 +83,16 @@ function esc(s: string): string {
   return s.replace(/[&<>"']/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[ch]!);
 }
 
+const BY = { transit: '', drive: ' by car', walk: ' on foot' } as const;
+
 function spoken(item: BadgeItem): string {
-  const who = `${item.person?.name ?? 'Someone'}, ${item.place.label}`;
+  const who = `${item.person?.name ?? 'Someone'}, ${item.place.label}${BY[item.place.mode]}`;
   const e = item.estimate;
   if (!e) return `${who}: loading`;
   if (e.error) return `${who}: couldn't load`;
   if (e.minutes == null) return `${who}: no trip within 90 minutes`;
-  return `${who}: ${e.exact ? '' : 'about '}${e.minutes} minutes`;
+  const walk = e.longWalk ? `, with a ${e.longWalk} minute walk, past the walking limit` : '';
+  return `${who}: ${e.exact ? '' : 'about '}${e.minutes} minutes${walk}`;
 }
 
 function tooltip(item: BadgeItem): string {
@@ -94,8 +100,18 @@ function tooltip(item: BadgeItem): string {
   const when = `${formatHhmm(place.arriveBy)} ${DAY_LABEL[place.day]}`;
   if (!e) return 'Loading';
   if (e.error) return e.error;
-  if (e.minutes == null) return `Nothing reaches ${place.label} by ${when} within 90 minutes and the walking limit.`;
+  if (place.mode !== 'transit') {
+    if (e.minutes == null) return `More than 90 minutes${BY[place.mode]} to ${place.label}.`;
+    const how = place.mode === 'drive' ? 'Drive' : 'Walk';
+    const traffic = place.mode === 'drive' ? ', without traffic' : '';
+    return `${how} ${e.exact ? '' : 'about '}${e.minutes} min to ${place.label}${traffic}, arriving by ${when}.`;
+  }
+  if (e.minutes == null) return `Nothing reaches ${place.label} by ${when} within 90 minutes, even with up to an hour's walk to a stop.`;
   const lines = [`Leave ${e.exact ? '' : 'about '}${e.minutes} min before ${when}.`];
+  if (e.longWalk) {
+    const limit = item.person ? `${possessive(item.person.name)} ${item.person.maxWalkMinutes}-minute limit` : 'the walking limit';
+    lines.push(`Needs a ${e.longWalk}-minute walk, past ${limit}.`);
+  }
   if (e.walkOnly) lines.push('Walkable the whole way.');
   else {
     if (e.stopName) lines.push(`Walk ${e.walkMinutes ?? '?'} min to ${e.stopName}.`);
@@ -109,12 +125,17 @@ function pill(item: BadgeItem, bands: readonly number[]): string {
   const e = item.estimate;
   const avatar = `<span class="av" style="background:${esc(item.person?.color ?? '#475569')}">${esc(item.initials)}</span>`;
   const label = `<span class="lbl">${esc(item.place.label)}</span>`;
+  // Transit is the default and goes unmarked; driving and walking get a small icon.
+  const mode = item.place.mode === 'drive' ? iconSvg('car', 12, 2.2) : item.place.mode === 'walk' ? iconSvg('walk', 12, 2.2) : '';
   const attrs = `data-act="open" aria-label="${esc(spoken(item))}" title="${esc(tooltip(item))}"`;
   if (!e) return `<button class="pill bn" ${attrs}><span class="spin"></span>${label}</button>`;
   if (e.error) return `<button class="pill bn" ${attrs}>${avatar}<span class="min">?</span>${label}</button>`;
   const band = e.minutes == null ? 3 : Math.min(bandIndex(e.minutes, bands), 3);
   const text = e.minutes == null ? '90+' : `${e.exact ? '' : '~'}${e.minutes}`;
-  return `<button class="pill b${band}" ${attrs}>${avatar}<span class="min">${text}</span>${label}</button>`;
+  // Only works with a walk past the person's limit: dashed, with a warning mark.
+  const long = e.longWalk ? ' long' : '';
+  const warn = e.longWalk ? `<span class="warn">${iconSvg('alert', 11, 2.4)}</span>` : '';
+  return `<button class="pill b${band}${long}" ${attrs}>${avatar}${mode}<span class="min">${text}</span>${warn}${label}</button>`;
 }
 
 /** Up to three pills; beyond that, the three slowest trips (in place order) plus "+N". */

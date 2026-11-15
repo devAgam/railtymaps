@@ -5,14 +5,14 @@ versions (the store rejects PNGs with transparency, and these are smaller).
 
 ## Package
 
-Upload `.output/railtymaps-1.0.0-chrome.zip`, built with `npm run zip`.
+Upload `.output/railtymaps-1.1.0-chrome.zip`, built with `npm run zip`.
 
 ## Store listing tab
 
 **Name** (from the manifest): RailtyMaps: transit times for home search
 
-**Summary** (from the manifest, 124 of 132 characters):
-Door-to-door transit times from Zillow and Redfin listings to the places everyone in your household goes. Washington, DC area.
+**Summary** (from the manifest, 129 of 132 characters):
+Transit, driving and walking times from Zillow and Redfin listings to the places everyone in your household goes. Most US metros.
 
 **Description:**
 
@@ -26,12 +26,13 @@ Add the people in your household and the places they go: work, a clinic, school,
 • Open a home to see the routes: when to leave, each walk and ride, transfers, and when the same trip runs earlier or later. Show any route on the map.
 • Save the homes you like and compare them side by side, sorted by average or worst commute. Copy a summary to share with family.
 • Each person gets their own walking pace, longest walk, and a step-free option for elevators instead of stairs.
+• Not everyone rides transit: set any place to driving or walking instead. Driving times are without traffic.
 
 Times mean "leave home this many minutes before the deadline", which counts waiting for buses that don't come often. They use each transit agency's published schedules. Live delays are not included.
 
-Covers the Washington, DC area: Metrorail and Metrobus, MARC, VRE, Ride On, Fairfax Connector, ART, DASH, TheBus and other local systems.
+Works across the US wherever Transitous has transit schedules: hundreds of agencies in 41 states and DC, including New York, Los Angeles, the Bay Area, Chicago, Boston, Philadelphia, Seattle, Portland, Denver, Atlanta, Phoenix, Minneapolis, Texas and Florida.
 
-Private by design: your people, places and saved homes stay in your browser. Trip planning uses Transitous, a free community trip planner, which receives only map coordinates. No account, no ads, no tracking.
+Private by design: your people, places and saved homes stay in your browser. Trip planning and place search use Transitous, a free community trip planner, which receives map coordinates and what you type into place search. No account, no ads, no tracking.
 
 Free and open source: https://github.com/devAgam/railtymaps
 
@@ -72,7 +73,7 @@ Show public-transit travel times from home listings on Zillow and Redfin to plac
 | unlimitedStorage | Cached transit data for one place is close to 1 MB (every stop that can reach it in time). A few places exceed the default quota. |
 | sidePanel | The extension's interface (routes, saved homes, people and places, settings) lives in the side panel. |
 | declarativeNetRequestWithHostAccess | Adds a User-Agent header identifying the extension to its own requests to api.transitous.org, which that service's usage policy requires. It does not change any other requests and does not block anything. |
-| Host permission: api.transitous.org | Trip planning: sends coordinates of the user's places and of homes they open, and receives routes and travel times. |
+| Host permission: api.transitous.org | Trip planning and place search: sends coordinates of the user's places, of homes they open, and of listings on the page for places they drive to, plus the text they type when searching for a place, and receives routes, travel times and matching places. |
 | Host permission: geocoding.geo.census.gov | Turns a street address the user types for a new place into coordinates. |
 | Content scripts on zillow.com and redfin.com | Read listing locations from search results and home pages the user opens, show travel-time badges on them, and draw transit lines and the reachable area on the site's map. |
 
@@ -80,7 +81,7 @@ Show public-transit travel times from home listings on Zillow and Redfin to plac
 
 **Data usage.** Check these data types:
 
-- **Location:** coordinates of places the user adds and of listings, sent to the routing service to compute routes.
+- **Location:** coordinates of places the user adds and of listings, and the addresses they search for, sent to the routing service and the Census geocoder to compute routes and find places.
 - **Website content:** listing addresses, prices and coordinates read from Zillow and Redfin pages to show travel times and to save homes locally.
 
 Leave everything else unchecked. The names typed for people ("Mom") and all saved data stay on the device and are never transmitted.
@@ -96,7 +97,7 @@ Then certify all three:
 ## Distribution tab
 
 - Visibility: Public
-- Regions: United States (coverage is the DC area for now; listing it worldwide would only invite confused reviews)
+- Regions: United States (address search and transit coverage are US-only for now)
 - Pricing: Free
 
 ## Before you submit
@@ -104,6 +105,6 @@ Then certify all three:
 - [ ] Load `.output/chrome-mv3` unpacked in your own Chrome and run through it on both sites: setup, a search page, a
       home page, Save, the Saved tab, Show on map.
 - [ ] In `chrome://extensions`, open the service worker's DevTools, Network tab, and confirm requests to
-      api.transitous.org carry the `RailtyMaps/1.0.0 (+https://github.com/devAgam/railtymaps)` User-Agent.
+      api.transitous.org carry the `RailtyMaps/1.1.0 (+https://github.com/devAgam/railtymaps)` User-Agent.
 - [ ] Confirm clicking a badge opens the side panel (if Chrome refuses, the page shows a hint to use the toolbar button).
 - [ ] Push the repo first so the privacy policy and homepage links resolve.

@@ -1,7 +1,17 @@
 import type { DayType } from './types';
 
-/** Everything in the DMV runs on Eastern time. */
-export const DMV_TZ = 'America/New_York';
+// Fallback for places saved before each place carried its own time zone (they
+// were all in the DC area then).
+export const DEFAULT_TZ = 'America/New_York';
+
+/** The time zone this browser is set to. */
+export function browserTimeZone(): string {
+  try {
+    return Intl.DateTimeFormat().resolvedOptions().timeZone || DEFAULT_TZ;
+  } catch {
+    return DEFAULT_TZ;
+  }
+}
 
 /** Offset of `tz` from UTC at instant `at`, in minutes (EST is -300, EDT is -240). */
 export function tzOffsetMinutes(at: Date, tz: string): number {
@@ -52,7 +62,7 @@ function inHolidaySeason(m: number, d: number): boolean {
  * holidays, and a few agencies run lighter Friday service. It never returns
  * today, because a deadline earlier today would already be in the past.
  */
-export function nextServiceTime(day: DayType, hhmm: string, now: Date = new Date(), tz: string = DMV_TZ): Date {
+export function nextServiceTime(day: DayType, hhmm: string, now: Date = new Date(), tz: string = DEFAULT_TZ): Date {
   const [hh, mm] = hhmm.split(':').map(Number);
   const today = zonedDate(now, tz);
   for (let i = 1; i <= 28; i++) {
@@ -74,8 +84,8 @@ export function nextServiceTime(day: DayType, hhmm: string, now: Date = new Date
   throw new Error(`No service day found for ${day}`);
 }
 
-/** "8:12 AM" in Eastern time. */
-export function formatClock(iso: string, tz: string = DMV_TZ): string {
+/** "8:12 AM" in the given time zone. */
+export function formatClock(iso: string, tz: string = DEFAULT_TZ): string {
   return new Date(iso).toLocaleTimeString('en-US', { timeZone: tz, hour: 'numeric', minute: '2-digit' });
 }
 

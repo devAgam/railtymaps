@@ -30,7 +30,11 @@ RailtyMaps talks to two outside services, only to do what you asked:
 1. **The routing server** (by default [Transitous](https://transitous.org), at `api.transitous.org`):
    - the coordinates of your places, to find which transit stops can reach them in time;
    - the coordinates of a home, when you open it in the side panel or ask for exact times;
-   - the text you type when searching for a place's address.
+   - for places you've set to driving, the coordinates of the listings on the page you're viewing, to get driving times
+     to all of them at once;
+   - the text you type when searching for a place, while you type it, to suggest matches. If you already have other
+     places, the coordinates of one of them go along so that nearby matches come first;
+   - a new place's coordinates, to look up its time zone.
 
    No names, no listing details and nothing that identifies you are sent, though like any web request it reaches the
    server from your IP address. Transitous is run by volunteers and has its own

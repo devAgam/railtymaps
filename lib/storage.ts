@@ -1,5 +1,6 @@
 import { browser } from 'wxt/browser';
 import type { Listing, PageStatus, Person, Place, SavedHome, Settings, Walking } from './types';
+import { DEFAULT_TZ } from './time';
 import { newId } from './util';
 
 // Everything the user enters lives in chrome.storage.local:
@@ -11,12 +12,13 @@ import { newId } from './util';
 // plus caches the background owns: reach:<placeId>, plan:<hash>, usage.
 // Per-tab state (the home being looked at, page status) is in storage.session.
 
-export const SCHEMA = 2;
+export const SCHEMA = 4;
 export const TRANSITOUS_URL = 'https://api.transitous.org';
 
 export const DEFAULT_SETTINGS: Settings = {
   showTransitLines: true,
   showPins: true,
+  showShading: true,
   shadePlaceId: null,
   bands: [30, 45, 60],
   routerUrl: TRANSITOUS_URL,
@@ -118,7 +120,7 @@ export async function importData(raw: unknown): Promise<void> {
   await browser.storage.local.set({
     schema: SCHEMA,
     people: file.people,
-    places: file.places,
+    places: file.places.map((p) => ({ ...p, tz: p.tz ?? DEFAULT_TZ, mode: p.mode ?? 'transit' })),
     saved: Array.isArray(file.saved) ? file.saved : [],
     settings: { ...DEFAULT_SETTINGS, ...(file.settings ?? {}), onboarded: true },
   });
@@ -144,13 +146,25 @@ interface V1Destination {
 }
 
 /**
- * 0.1 kept one set of walking settings and a flat list of "destinations".
- * Turn that into a single person who owns all the places.
+ * Brings stored data up to SCHEMA. Safe to run on every startup.
+ *   1 → 2: 0.1 kept one set of walking settings and a flat list of
+ *          "destinations". They become one person who owns every place.
+ *   2 → 3: places get their own time zone. Before 3 everything was DC-only.
+ *   3 → 4: places get a travel mode. Everything before 4 was transit.
  */
 export async function migrate(): Promise<void> {
   const stored = await browser.storage.local.get(['schema', 'destinations', 'shortlist', 'settings']);
-  if ((stored.schema as number | undefined) === SCHEMA) return;
+  const schema = (stored.schema as number | undefined) ?? 0;
+  if (schema >= SCHEMA) return;
+  if (schema < 2) await fromV1(stored);
+  const places = await getPlaces();
+  if (places.some((p) => !p.tz || !p.mode)) {
+    await savePlaces(places.map((p) => ({ ...p, tz: p.tz ?? DEFAULT_TZ, mode: p.mode ?? 'transit' })));
+  }
+  await browser.storage.local.set({ schema: SCHEMA });
+}
 
+async function fromV1(stored: Record<string, unknown>): Promise<void> {
   const old = (stored.settings ?? {}) as Record<string, unknown>;
   const destinations = (stored.destinations as V1Destination[] | undefined) ?? [];
   const pace = old.walkPace === 'average' ? 'brisk' : ((old.walkPace as Person['walkPace']) ?? 'relaxed');
@@ -162,27 +176,32 @@ export async function migrate(): Promise<void> {
     maxWalkMinutes: (old.maxWalkMinutes as number) ?? 15,
     stepFree: !!old.stepFree,
   };
-  const places: Place[] = destinations.map((d) => ({
-    id: d.id,
-    personId: me.id,
-    label: d.label,
-    address: d.address,
-    lat: d.lat,
-    lon: d.lon,
-    arriveBy: d.arriveBy,
-    day: d.day,
-    enabled: d.enabled,
-  }));
   const shortlist = (stored.shortlist as (Listing & { addedAt?: number })[] | undefined) ?? [];
 
-  const update: Record<string, unknown> = { schema: SCHEMA };
+  const update: Record<string, unknown> = {};
   if (destinations.length) {
     update.people = [me];
-    update.places = places;
+    update.places = destinations.map(
+      (d): Place => ({
+        id: d.id,
+        personId: me.id,
+        label: d.label,
+        address: d.address,
+        lat: d.lat,
+        lon: d.lon,
+        arriveBy: d.arriveBy,
+        day: d.day,
+        tz: DEFAULT_TZ,
+        mode: 'transit',
+        enabled: d.enabled,
+      }),
+    );
+    const shaded = (old.mapDestinationId as string | null) ?? null;
     update.settings = {
       ...DEFAULT_SETTINGS,
       showTransitLines: old.showTransitLines ?? true,
-      shadePlaceId: (old.mapDestinationId as string | null) ?? null,
+      showShading: shaded != null,
+      shadePlaceId: shaded,
       bands: (old.bands as Settings['bands']) ?? DEFAULT_SETTINGS.bands,
       routerUrl: (old.routerUrl as string) ?? TRANSITOUS_URL,
       onboarded: true,

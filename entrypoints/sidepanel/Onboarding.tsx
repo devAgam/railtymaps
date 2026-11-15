@@ -33,7 +33,7 @@ export function Onboarding({ people: savedPeople, places }: { people: Person[]; 
   };
 
   const finish = async () => {
-    await saveSettings({ onboarded: true, shadePlaceId: places[0]?.id ?? null });
+    await saveSettings({ onboarded: true, shadePlaceId: places[0]?.id ?? null, showShading: true });
   };
 
   const open = (url: string) => void browser.tabs.create({ url });
@@ -106,7 +106,14 @@ export function Onboarding({ people: savedPeople, places }: { people: Person[]; 
                 ))}
               </div>
             )}
-            <PlaceForm key={`${forPerson}-${formKey}`} people={people} personId={forPerson} submitLabel="Add place" onSave={(p) => void addPlace(p)} />
+            <PlaceForm
+              key={`${forPerson}-${formKey}`}
+              people={people}
+              personId={forPerson}
+              near={places[0] && { lat: places[0].lat, lon: places[0].lon }}
+              submitLabel="Add place"
+              onSave={(p) => void addPlace(p)}
+            />
             {places.length > 0 && (
               <div className="section">
                 <span className="label" style={{ margin: 0 }}>
@@ -138,10 +145,10 @@ export function Onboarding({ people: savedPeople, places }: { people: Person[]; 
               </p>
             </div>
             <div className="grid-2">
-              <button type="button" className="btn btn-primary" onClick={() => open('https://www.zillow.com/washington-dc/')}>
+              <button type="button" className="btn btn-primary" onClick={() => open('https://www.zillow.com/')}>
                 Open Zillow
               </button>
-              <button type="button" className="btn btn-primary" onClick={() => open('https://www.redfin.com/city/12839/DC/Washington-DC')}>
+              <button type="button" className="btn btn-primary" onClick={() => open('https://www.redfin.com/')}>
                 Open Redfin
               </button>
             </div>
