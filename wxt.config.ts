@@ -8,7 +8,7 @@ export default defineConfig({
     short_name: 'RailtyMaps',
     description:
       'Transit, driving and walking times from Zillow and Redfin listings to the places everyone in your household goes. Most US metros.',
-    homepage_url: 'https://github.com/devAgam/railtymaps',
+    homepage_url: 'https://railtymaps.com',
     // sidePanel.open() from a content-script click needs 116.
     minimum_chrome_version: '116',
     permissions: ['storage', 'unlimitedStorage', 'sidePanel', 'declarativeNetRequestWithHostAccess'],
