@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy policy · RailtyMaps</title>
+<meta name="description" content="What the RailtyMaps Chrome extension stores, what it sends and to whom. No account, no analytics and no server of its own.">
+<link rel="canonical" href="https://railtymaps.com/privacy/">
+<meta name="theme-color" content="#0f172a">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="/assets/site.css">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="RailtyMaps">
+<meta property="og:url" content="https://railtymaps.com/privacy/">
+<meta property="og:title" content="RailtyMaps privacy policy">
+<meta property="og:description" content="What the RailtyMaps Chrome extension stores, what it sends and to whom.">
+<meta property="og:image" content="https://railtymaps.com/assets/img/share.jpg">
+<meta name="twitter:card" content="summary_large_image">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <div class="wrap topbar">
+    <a class="brand" href="/" aria-label="RailtyMaps home">
+      <svg aria-hidden="true" focusable="false" width="34" height="34" viewBox="0 0 100 100"><rect width="100" height="100" rx="22" fill="#1d4ed8"/><path d="M50 14 15 45h70z" fill="#fff"/><path d="M25 42h50v24H25z" fill="#fff"/><path d="M44 53h12v13H44z" fill="#1d4ed8"/><rect x="10" y="75.5" width="80" height="9" rx="4.5" fill="#fbbf24"/><circle cx="28" cy="80" r="7.5" fill="#fff"/><circle cx="72" cy="80" r="7.5" fill="#fff"/></svg>
+      RailtyMaps
+    </a>
+    <nav class="nav" aria-label="Main">
+      <a href="/">Home</a>
+      <a href="https://github.com/devAgam/railtymaps">GitHub</a>
+      <a class="nav-cta" href="/#install">Get the extension</a>
+    </nav>
+  </div>
+</header>
+
+<!-- The extension part mirrors PRIVACY.md in the repo; keep the two in sync. -->
+<main id="main" class="doc">
+  <h1>Privacy policy</h1>
+  <p class="updated">Last updated: November 14, 2026</p>
+
+  <p>RailtyMaps is a browser extension that adds public-transit travel times to home listings on zillow.com and redfin.com. It has no account, no server of its own and no analytics. This page lists everything it stores and everything it sends.</p>
+
+  <h2>What it stores, and where</h2>
+  <p>All of this is kept in your browser's extension storage (<code>chrome.storage</code>) on your computer. None of it is uploaded anywhere by RailtyMaps.</p>
+  <ul>
+    <li><strong>People and places you add:</strong> names you type (like "Mom"), each person's walking settings, and each place's name, address, coordinates, arrive-by time and days.</li>
+    <li><strong>Homes you save:</strong> the listing's address, coordinates, price, beds and baths, and link, copied from the listing page.</li>
+    <li><strong>Settings:</strong> map options, color bands and the routing server address.</li>
+    <li><strong>Cached results:</strong> transit data for your places and trip plans for homes you looked at, kept for up to a week so the same question isn't asked twice.</li>
+    <li><strong>A count of recent trip searches</strong> (timestamps only), used to stay under the routing server's daily limit.</li>
+  </ul>
+  <p>The home you're currently looking at, per tab, is held in session storage and cleared when the tab or browser closes.</p>
+  <p>You can export all of it as a JSON file or delete all of it from the extension's Settings screen. Uninstalling the extension deletes it too.</p>
+
+  <h2>What it sends, and to whom</h2>
+  <p>RailtyMaps talks to two outside services, only to do what you asked:</p>
+  <ol>
+    <li>
+      <strong>The routing server</strong> (by default <a href="https://transitous.org">Transitous</a>, at <code>api.transitous.org</code>):
+      <ul>
+        <li>the coordinates of your places, to find which transit stops can reach them in time;</li>
+        <li>the coordinates of a home, when you open it in the side panel or ask for exact times;</li>
+        <li>for places you've set to driving, the coordinates of the listings on the page you're viewing, to get driving times to all of them at once;</li>
+        <li>the text you type when searching for a place, while you type it, to suggest matches. If you already have other places, the coordinates of one of them go along so that nearby matches come first;</li>
+        <li>a new place's coordinates, to look up its time zone.</li>
+      </ul>
+      <p>No names, no listing details and nothing that identifies you are sent, though like any web request it reaches the server from your IP address. Transitous is run by volunteers and has its own <a href="https://transitous.org/privacy/">privacy policy</a>. You can point RailtyMaps at a different routing server in Settings.</p>
+    </li>
+    <li><strong>The US Census Bureau geocoder</strong> (<code>geocoding.geo.census.gov</code>): the address text you type when adding a place, to find its coordinates. Census has its own <a href="https://www.census.gov/about/policies/privacy.html">privacy policy</a>.</li>
+  </ol>
+  <p>Nothing is sent to Zillow or Redfin beyond what those sites already load themselves. RailtyMaps reads listing details from the pages you open (addresses, coordinates, prices) in your own browser and does not send them anywhere except as coordinates to the routing server, as above.</p>
+  <p>RailtyMaps does not sell data, does not use it for advertising, and does not share it with anyone else.</p>
+
+  <h2>Permissions</h2>
+  <ul>
+    <li><strong>Access to zillow.com and redfin.com:</strong> to read listings on pages you open and show transit times on them.</li>
+    <li><strong>storage, unlimitedStorage:</strong> to keep your people, places, saved homes and cached transit data on your computer. Cached data for one place can be close to a megabyte, more than the default storage quota allows.</li>
+    <li><strong>sidePanel:</strong> for the RailtyMaps panel.</li>
+    <li><strong>declarativeNetRequestWithHostAccess:</strong> to add an identifying User-Agent header to RailtyMaps' own requests to Transitous, as their usage policy asks. It changes no other requests.</li>
+    <li><strong>Access to api.transitous.org and geocoding.geo.census.gov:</strong> to send the requests described above.</li>
+  </ul>
+
+  <h2>This website</h2>
+  <p>railtymaps.com sets no cookies and runs no analytics or tracking scripts, and it loads nothing from other servers. It's hosted on Cloudflare Pages, and Cloudflare handles requests to it under its own <a href="https://www.cloudflare.com/privacypolicy/">privacy policy</a>.</p>
+
+  <h2>Contact</h2>
+  <p>Questions or concerns: <a href="https://github.com/devAgam/railtymaps/issues">open an issue on GitHub</a>.</p>
+</main>
+
+<footer class="footer">
+  <div class="wrap footer-inner">
+    <div class="footer-main">
+      <div class="footer-about">
+        <a class="brand" href="/">
+          <svg aria-hidden="true" focusable="false" width="28" height="28" viewBox="0 0 100 100"><rect width="100" height="100" rx="22" fill="#1d4ed8"/><path d="M50 14 15 45h70z" fill="#fff"/><path d="M25 42h50v24H25z" fill="#fff"/><path d="M44 53h12v13H44z" fill="#1d4ed8"/><rect x="10" y="75.5" width="80" height="9" rx="4.5" fill="#fbbf24"/><circle cx="28" cy="80" r="7.5" fill="#fff"/><circle cx="72" cy="80" r="7.5" fill="#fff"/></svg>
+          RailtyMaps
+        </a>
+        <p>Not affiliated with Zillow, Redfin or any transit agency.</p>
+      </div>
+      <nav class="footer-nav" aria-label="Footer">
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/#install">Install</a></li>
+          <li><a href="/#faq">FAQ</a></li>
+        </ul>
+        <ul>
+          <li><a href="https://github.com/devAgam/railtymaps">GitHub</a></li>
+          <li><a href="https://github.com/devAgam/railtymaps/issues">Report a problem</a></li>
+        </ul>
+      </nav>
+    </div>
+    <p class="footer-legal">© 2026 RailtyMaps · MIT License</p>
+  </div>
+</footer>
+</body>
+</html>
